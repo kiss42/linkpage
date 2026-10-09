@@ -72,8 +72,8 @@ kbd { font: 400 .8rem var(--f-pixel); border: 1px solid var(--gold-lo); border-b
 .back h2 { position: absolute; left: 56px; right: 56px; top: 104px; margin: 0; display: flex; justify-content: space-between; align-items: baseline; font: 400 24px var(--f-pixel); letter-spacing: .12em; text-transform: uppercase; color: var(--gold-hi); }
 .back h2 span:last-child { color: var(--muted); }
 .links { position: absolute; left: 56px; right: 56px; top: 156px; display: grid; gap: 11px; }
-.link { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 80px; padding: 0 26px; overflow: hidden; border: 2px solid var(--gold); border-radius: 12px; color: var(--ivory); text-decoration: none; pointer-events: auto; background: linear-gradient(90deg, rgba(212,175,55,.14), rgba(5,5,5,.8) 60%); transition: color .2s, background .2s; }
-.link .nm { font-size: 40px; line-height: 1; white-space: nowrap; }
+.link { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 92px; padding: 0 26px; overflow: hidden; border: 2px solid var(--gold); border-radius: 12px; color: var(--ivory); text-decoration: none; pointer-events: auto; background: linear-gradient(90deg, rgba(212,175,55,.14), rgba(5,5,5,.8) 60%); transition: color .2s, background .2s; }
+.link .nm { font-size: 44px; line-height: 1; white-space: nowrap; }
 .link .tg { font: 400 18px var(--f-pixel); letter-spacing: .08em; color: var(--gold-hi); margin-left: auto; }
 .link .ar { font: 400 28px var(--f-pixel); color: var(--gold); }
 .link:hover, .link:focus-visible { background: var(--gold-grad); color: var(--ink); }
@@ -110,7 +110,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 
 <div class="bwrap" id="bwrap">
   <div class="back" id="back">
-    <h2><span>リンク / Links</span><span>06</span></h2>
+    <h2><span>リンク / Links</span><span>05</span></h2>
     <div class="links" id="links"></div>
     <div class="mail">
       <code id="addr">kisspierre42@gmail.com</code>
@@ -145,14 +145,13 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 
   /* Edit your links here. Each prints on the back of the pass in its own display face. */
   var LINKS = [
-    { name: 'GitHub', tag: 'コード', href: 'https://github.com/kiss42', f: 'var(--f-pixel)' },
-    { name: 'LinkedIn', tag: 'ネットワーク', href: '#', f: 'var(--f-mincho); font-weight: 800' },
-    { name: 'Instagram', tag: 'フォト', href: '#', f: 'var(--f-ramp)' },
-    { name: 'X', tag: 'つぶやき', href: '#', f: 'var(--f-dela)' },
-    { name: 'YouTube', tag: 'ビデオ', href: '#', f: 'var(--f-train)' },
-    { name: 'Portfolio', tag: '作品', href: '#', f: 'var(--f-reggae)' }
+    { name: 'Portfolio', tag: '作品', href: 'https://kiss42.github.io/newportfolio/', f: 'var(--f-reggae)' },
+    { name: 'SoulSite', tag: '制作中', href: 'https://soulsite-roan.vercel.app', f: 'var(--f-train)' },
+    { name: 'Threads', tag: 'スレッド', href: 'https://www.threads.com/@_papipierre', f: 'var(--f-ramp)' },
+    { name: 'X', tag: 'つぶやき', href: 'https://x.com/mysticdesk', f: 'var(--f-dela)' },
+    { name: 'GitHub', tag: 'コード', href: 'https://github.com/kiss42', f: 'var(--f-pixel)' }
   ];
-  function linkHTML(l) { return '<a class="link" href="' + l.href + '"><span class="nm" style="font-family: ' + l.f + '">' + l.name + '</span><span class="tg">' + l.tag + '</span><span class="ar">↗</span></a>'; }
+  function linkHTML(l) { return '<a class="link" target="_blank" rel="noopener noreferrer" href="' + l.href + '"><span class="nm" style="font-family: ' + l.f + '">' + l.name + '</span><span class="tg">' + l.tag + '</span><span class="ar">↗</span></a>'; }
   document.getElementById('links').innerHTML = LINKS.map(linkHTML).join('');
   document.getElementById('fallback').insertAdjacentHTML('beforeend', LINKS.map(linkHTML).join(''));
 
