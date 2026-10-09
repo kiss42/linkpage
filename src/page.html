@@ -3,15 +3,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* Layout: full-bleed 3D stage behind a left-aligned hero, then a tilt-card link grid, ticker and status strip. */
+/* Layout: warp-speed 3D stage, oversized glitch name left, rainbow knot right, cards that flood with colour on hover, two counter-scrolling tickers. */
 :root {
-  --ink: #06100f;
-  --panel: #0e1c1b;
-  --line: #1f3533;
-  --text: #eaf5f2;
-  --muted: #8aa39f;
-  --signal: #ffd23f;
-  --aqua: #4ff0d2;
+  --ink: #07050d;
+  --panel: #130f20;
+  --line: #2a2142;
+  --text: #fff7ff;
+  --muted: #a99bc6;
+  --pink: #ff2e93;
+  --yellow: #ffe600;
+  --cyan: #00e5ff;
+  --lime: #b6ff00;
+  --orange: #ff7a1a;
   --f-display: "Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
   --f-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
@@ -19,74 +22,96 @@
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  background: var(--ink);
-  color: var(--text);
-  font: 400 1rem/1.55 var(--f-body);
-  overflow-x: hidden;
-}
-#stage { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; }
-.veil { position: fixed; inset: 0; z-index: 1; pointer-events: none;
-  background: radial-gradient(70% 60% at 75% 35%, transparent 0%, var(--ink) 100%), linear-gradient(90deg, var(--ink) 0%, transparent 60%); opacity: .75; }
-.wrap { position: relative; z-index: 2; max-width: 68rem; margin: 0 auto; padding-inline: 1.25rem; padding-block: 2rem 4rem; }
+body { margin: 0; background: var(--ink); color: var(--text); font: 400 1rem/1.55 var(--f-body); overflow-x: hidden; }
+#stage, #fx { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+#stage { z-index: 0; }
+#fx { z-index: 50; pointer-events: none; }
+.blobs { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.blobs i { position: absolute; width: 38rem; height: 38rem; border-radius: 50%; filter: blur(90px); opacity: .35; animation: drift 14s ease-in-out infinite alternate; }
+.blobs i:nth-child(1) { background: var(--pink); left: -10rem; top: -8rem; }
+.blobs i:nth-child(2) { background: var(--cyan); right: -12rem; top: 30%; animation-delay: -5s; opacity: .22; }
+.blobs i:nth-child(3) { background: var(--orange); left: 30%; bottom: -16rem; animation-delay: -9s; opacity: .22; }
+@keyframes drift { to { transform: translate(6rem, 4rem) scale(1.2); } }
+.grain { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, var(--ink) 0%, transparent 55%); opacity: .8; }
+.wrap { position: relative; z-index: 2; max-width: 72rem; margin: 0 auto; padding-inline: 1.25rem; padding-block: 1.5rem 4rem; overflow-x: clip; }
 
 .top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font: 500 .8rem var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-.live { display: inline-flex; align-items: center; gap: .5rem; }
-.live i { width: .55rem; height: .55rem; border-radius: 50%; background: var(--aqua); box-shadow: 0 0 0 0 var(--aqua); animation: ping 1.8s infinite; }
-@keyframes ping { 70% { box-shadow: 0 0 0 .6rem transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.live { display: inline-flex; align-items: center; gap: .55rem; color: var(--lime); }
+.live i { width: .6rem; height: .6rem; border-radius: 50%; background: var(--lime); animation: ping 1.4s infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 var(--lime); } 80%, 100% { box-shadow: 0 0 0 .8rem transparent; } }
 
-.hero { padding-block: clamp(3rem, 12vh, 7rem) 3rem; max-width: 40rem; }
-.eyebrow { font: 500 .85rem var(--f-mono); color: var(--aqua); letter-spacing: .1em; text-transform: uppercase; margin: 0 0 1rem; }
-h1 { font: 800 clamp(3.2rem, 11vw, 7rem)/.92 var(--f-display); letter-spacing: -.035em; margin: 0; text-wrap: balance;
-  background: linear-gradient(100deg, var(--text) 30%, var(--signal) 60%, var(--aqua) 90%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
-  animation: sheen 6s ease-in-out infinite alternate; }
+.hero { padding-block: clamp(2.5rem, 9vh, 5.5rem) 2rem; max-width: 46rem; }
+.hello { display: table; font: 500 .9rem var(--f-mono); background: var(--yellow); color: var(--ink); padding: .3rem .7rem; transform: rotate(-2deg); margin: 0 0 1.25rem; letter-spacing: .06em; text-transform: uppercase; }
+h1 { position: relative; display: block; width: fit-content; font: 800 clamp(3.6rem, 14vw, 9.5rem)/.86 var(--f-display); letter-spacing: -.045em; margin: 0; cursor: default;
+  background: linear-gradient(95deg, var(--text) 10%, var(--yellow) 35%, var(--pink) 60%, var(--cyan) 85%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: sheen 5s linear infinite alternate; }
+h1 .l { display: block; }
+h1::before, h1::after { content: attr(data-text); position: absolute; inset: 0; white-space: pre-line; opacity: 0; background: none; -webkit-background-clip: border-box; background-clip: border-box; pointer-events: none; }
+h1::before { color: var(--cyan); }
+h1::after { color: var(--pink); }
+h1:hover::before { opacity: .9; animation: glitchA .35s steps(2) infinite; }
+h1:hover::after { opacity: .9; animation: glitchB .35s steps(2) infinite; }
 @keyframes sheen { to { background-position: 100% 0; } }
-.role { margin: 1.25rem 0 0; font: 500 clamp(1.1rem, 3vw, 1.5rem) var(--f-mono); min-height: 2em; }
-.role b { color: var(--signal); font-weight: 500; }
-.caret { display: inline-block; width: .6ch; height: 1.1em; background: var(--signal); vertical-align: -.15em; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+@keyframes glitchA { 0% { transform: translate(-6px, 2px); clip-path: inset(10% 0 55% 0); } 50% { transform: translate(5px, -3px); clip-path: inset(60% 0 8% 0); } 100% { transform: translate(-3px, 1px); clip-path: inset(30% 0 35% 0); } }
+@keyframes glitchB { 0% { transform: translate(6px, -2px); clip-path: inset(55% 0 10% 0); } 50% { transform: translate(-5px, 3px); clip-path: inset(8% 0 62% 0); } 100% { transform: translate(3px, -1px); clip-path: inset(38% 0 28% 0); } }
+.role { margin: 1.5rem 0 0; font: 500 clamp(1.15rem, 3.2vw, 1.7rem) var(--f-mono); min-height: 2em; color: var(--cyan); }
+.caret { display: inline-block; width: .6ch; height: 1.1em; background: var(--pink); vertical-align: -.15em; margin-left: 2px; animation: blink 1s steps(1) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
-.bio { color: var(--muted); max-width: 34rem; margin: 1rem 0 0; font-size: 1.1rem; }
-.cta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
-.btn { font: 600 1rem var(--f-body); padding: .85rem 1.4rem; border-radius: .25rem; text-decoration: none; border: 1px solid var(--signal); color: var(--ink); background: var(--signal); transition: transform .15s, box-shadow .15s; }
-.btn:hover, .btn:focus-visible { transform: translate(-3px, -3px); box-shadow: 4px 4px 0 var(--aqua); }
-.btn.ghost { background: transparent; color: var(--text); border-color: var(--line); }
+.bio { color: var(--muted); max-width: 32rem; margin: .5rem 0 0; font-size: 1.15rem; }
+.cta { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: 2rem; }
+.btn { display: inline-block; font: 800 1.05rem var(--f-display); letter-spacing: -.01em; padding: 1rem 1.7rem; border-radius: 99px; text-decoration: none; border: 2px solid var(--pink); color: var(--ink); background: var(--pink); box-shadow: 0 0 0 0 var(--yellow); transition: box-shadow .2s, background .2s, color .2s; will-change: transform; cursor: pointer; font-family: var(--f-display); }
+.btn:hover, .btn:focus-visible { box-shadow: 0 0 0 6px color-mix(in srgb, var(--yellow) 55%, transparent), 0 0 40px var(--pink); }
+.btn.ghost { background: transparent; color: var(--text); border-color: var(--cyan); }
+.btn.ghost:hover { background: var(--cyan); color: var(--ink); }
+.hint { margin: 1.25rem 0 0; font: 400 .8rem var(--f-mono); color: var(--muted); }
+kbd { font: 500 .75rem var(--f-mono); border: 1px solid var(--muted); border-bottom-width: 3px; border-radius: .3rem; padding: .05rem .4rem; color: var(--text); }
 
-h2 { font: 800 clamp(1.5rem, 4vw, 2rem) var(--f-display); letter-spacing: -.02em; margin: 3.5rem 0 1.25rem; display: flex; align-items: baseline; gap: .75rem; }
-h2 small { font: 500 .8rem var(--f-mono); color: var(--muted); letter-spacing: .06em; }
+h2 { font: 800 clamp(2rem, 6vw, 3.4rem)/1 var(--f-display); letter-spacing: -.035em; margin: 4rem 0 1.5rem; display: flex; align-items: baseline; flex-wrap: wrap; gap: .5rem 1rem; }
+h2 small { font: 500 .85rem var(--f-mono); color: var(--yellow); letter-spacing: .06em; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: 1rem; perspective: 900px; }
-.card { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 2.5rem; min-height: 9.5rem; padding: 1.25rem;
-  background: linear-gradient(160deg, var(--panel), color-mix(in srgb, var(--panel) 60%, var(--ink)));
-  border: 1px solid var(--line); border-radius: .5rem; color: var(--text); text-decoration: none;
-  transform-style: preserve-3d; transition: transform .2s ease-out, border-color .2s; will-change: transform; min-width: 0; }
-.card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .2s;
-  background: radial-gradient(18rem circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--signal) 22%, transparent), transparent 60%); }
-.card:hover, .card:focus-visible { border-color: var(--signal); }
-.card:hover::after, .card:focus-visible::after { opacity: 1; }
-.card .tag { font: 500 .75rem var(--f-mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; transform: translateZ(20px); }
-.card .name { font: 800 1.5rem/1.1 var(--f-display); letter-spacing: -.02em; display: flex; justify-content: space-between; align-items: flex-end; gap: .5rem; transform: translateZ(40px); overflow-wrap: anywhere; }
-.card .arrow { color: var(--signal); transition: transform .2s; font-family: var(--f-mono); }
-.card:hover .arrow { transform: translate(4px, -4px); }
-.in { opacity: 0; transform: translateY(18px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--i, 0) * 80ms + .2s); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); gap: 1rem; perspective: 1000px; }
+.card { --c: var(--pink); position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 3rem; min-height: 11rem; padding: 1.3rem; overflow: hidden;
+  background: var(--panel); border: 2px solid var(--line); border-radius: 1.1rem; color: var(--text); text-decoration: none;
+  transform-style: preserve-3d; transition: transform .2s ease-out, border-color .2s, color .25s; will-change: transform; min-width: 0; }
+.card::before { content: ""; position: absolute; left: 50%; top: 100%; width: 150%; aspect-ratio: 1; border-radius: 50%; background: var(--c); transform: translate(-50%, 0) scale(.2); transition: transform .45s cubic-bezier(.2,.8,.2,1); z-index: 0; }
+.card > * { position: relative; z-index: 1; }
+.card:hover, .card:focus-visible { border-color: var(--c); color: var(--ink); }
+.card:hover::before, .card:focus-visible::before { transform: translate(-50%, -60%) scale(1); }
+.card .tag { font: 500 .75rem var(--f-mono); letter-spacing: .1em; text-transform: uppercase; display: flex; justify-content: space-between; color: var(--c); transition: color .25s; transform: translateZ(20px); }
+.card:hover .tag { color: var(--ink); }
+.card .name { font: 800 1.9rem/1 var(--f-display); letter-spacing: -.03em; display: flex; justify-content: space-between; align-items: flex-end; gap: .5rem; transform: translateZ(45px); overflow-wrap: anywhere; }
+.card .arrow { font-family: var(--f-mono); font-size: 1.5rem; transition: transform .25s; }
+.card:hover .arrow { transform: translate(6px, -6px) rotate(8deg); }
+.in { opacity: 0; transform: translateY(24px) scale(.97); animation: rise .7s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(var(--i, 0) * 70ms + .15s); }
 @keyframes rise { to { opacity: 1; transform: none; } }
 
-.mail { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: 1rem; font: 500 .95rem var(--f-mono); color: var(--muted); }
-.mail code { color: var(--text); background: var(--panel); border: 1px solid var(--line); padding: .35rem .6rem; border-radius: .25rem; overflow-wrap: anywhere; }
-.mail button { font: 500 .85rem var(--f-mono); color: var(--ink); background: var(--aqua); border: 0; padding: .4rem .8rem; border-radius: .25rem; cursor: pointer; }
+.mail { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: 1.25rem; font: 500 .95rem var(--f-mono); color: var(--muted); }
+.mail code { color: var(--text); background: var(--panel); border: 2px dashed var(--yellow); padding: .45rem .8rem; border-radius: .5rem; overflow-wrap: anywhere; }
+.mail button { font: 500 .85rem var(--f-mono); color: var(--ink); background: var(--yellow); border: 0; padding: .55rem .95rem; border-radius: 99px; cursor: pointer; }
 
-.ticker { overflow: hidden; margin-top: 4rem; border-block: 1px solid var(--line); padding-block: .9rem; white-space: nowrap; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
-.track { display: inline-flex; gap: 2.5rem; animation: slide 28s linear infinite; font: 800 1.6rem var(--f-display); letter-spacing: -.01em; color: transparent; -webkit-text-stroke: 1px var(--muted); }
-.track span:nth-child(3n) { color: var(--signal); -webkit-text-stroke: 0; }
+.bands { margin: 4.5rem -1.25rem 0; overflow: hidden; transform: rotate(-2.2deg); }
+.band { overflow: hidden; white-space: nowrap; padding-block: .8rem; background: var(--yellow); color: var(--ink); }
+.band.b2 { background: var(--pink); color: var(--text); transform: translateY(-.2rem); }
+.track { display: inline-flex; gap: 2rem; font: 800 clamp(1.6rem, 4vw, 2.4rem) var(--f-display); letter-spacing: -.03em; text-transform: uppercase; animation: slide 26s linear infinite; }
+.b2 .track { animation-direction: reverse; animation-duration: 32s; }
 @keyframes slide { to { transform: translateX(-50%); } }
 
-.now { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: .5rem; overflow: hidden; }
-.now div { background: var(--ink); padding: 1.1rem; min-width: 0; }
-.now dt { font: 500 .75rem var(--f-mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
-.now dd { margin: .4rem 0 0; font: 600 1.15rem var(--f-body); }
-footer { margin-top: 3rem; color: var(--muted); font: 400 .85rem var(--f-mono); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+.now { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: 1rem; margin: 0; }
+.now div { border: 2px solid var(--line); border-radius: 1rem; padding: 1.1rem; min-width: 0; background: var(--panel); }
+.now dt { font: 500 .75rem var(--f-mono); color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+.now dd { margin: .5rem 0 0; font: 800 1.5rem/1.1 var(--f-display); letter-spacing: -.02em; }
+.now div:nth-child(1) dd { color: var(--lime); }
+.now div:nth-child(2) dd { color: var(--cyan); }
+.now div:nth-child(3) dd { color: var(--yellow); font-variant-numeric: tabular-nums; }
+.now div:nth-child(4) dd { color: var(--pink); }
+footer { margin-top: 3.5rem; color: var(--muted); font: 400 .85rem var(--f-mono); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
 
-a:focus-visible, button:focus-visible { outline: 2px solid var(--aqua); outline-offset: 3px; }
+.cursor { position: fixed; left: 0; top: 0; z-index: 60; width: 2.2rem; height: 2.2rem; margin: -1.1rem 0 0 -1.1rem; border: 2px solid var(--yellow); border-radius: 50%; pointer-events: none; mix-blend-mode: difference; transition: width .2s, height .2s, margin .2s, background .2s; display: none; }
+.cursor.big { width: 4.5rem; height: 4.5rem; margin: -2.25rem 0 0 -2.25rem; background: var(--yellow); }
+@media (pointer: fine) { .cursor { display: block; } body, a, button { cursor: none; } }
+
+a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+@media (max-width: 800px) { .grain { background: linear-gradient(180deg, transparent 0%, var(--ink) 90%); opacity: .6; } .hero { padding-top: 3rem; } }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
   .in { opacity: 1; transform: none; }
@@ -94,7 +119,10 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--aqua); outline-
 </style>
 
 <canvas id="stage" aria-hidden="true"></canvas>
-<div class="veil" aria-hidden="true"></div>
+<div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="grain" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
 
 <div class="wrap">
   <div class="top">
@@ -103,25 +131,26 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--aqua); outline-
   </div>
 
   <header class="hero">
-    <p class="eyebrow in" style="--i:0">Personal link hub</p>
-    <h1 id="name" class="in" style="--i:1">Steven Pierre</h1>
+    <p class="hello in" style="--i:0" id="hello">Hey, welcome</p>
+    <h1 id="name" class="in" style="--i:1" data-text="Steven&#10;Pierre"><span class="l">Steven</span><span class="l">Pierre</span></h1>
     <p class="role in" style="--i:2"><span id="typed"></span><span class="caret"></span></p>
     <p class="bio in" style="--i:3">Everything I'm building and everywhere you can find me, in one place.</p>
     <div class="cta in" style="--i:4">
-      <a class="btn" href="#links">See my links</a>
-      <a class="btn ghost" href="https://github.com/kiss42">GitHub profile</a>
+      <a class="btn mag" href="#links">See my links</a>
+      <a class="btn ghost mag" href="https://github.com/kiss42">GitHub profile</a>
     </div>
+    <p class="hint in" style="--i:5">Tap anywhere for confetti. Hold <kbd>Space</kbd> or press and hold the page for warp speed.</p>
   </header>
 
   <section id="links">
     <h2>Find me <small>/ 06 places</small></h2>
     <div class="grid">
-      <a class="card in" style="--i:5" href="https://github.com/kiss42"><span class="tag">Code</span><span class="name">GitHub <span class="arrow">↗</span></span></a>
-      <a class="card in" style="--i:6" href="#"><span class="tag">Network</span><span class="name">LinkedIn <span class="arrow">↗</span></span></a>
-      <a class="card in" style="--i:7" href="#"><span class="tag">Photos</span><span class="name">Instagram <span class="arrow">↗</span></span></a>
-      <a class="card in" style="--i:8" href="#"><span class="tag">Updates</span><span class="name">X <span class="arrow">↗</span></span></a>
-      <a class="card in" style="--i:9" href="#"><span class="tag">Video</span><span class="name">YouTube <span class="arrow">↗</span></span></a>
-      <a class="card in" style="--i:10" href="#"><span class="tag">Work</span><span class="name">Portfolio <span class="arrow">↗</span></span></a>
+      <a class="card in" style="--i:6; --c: var(--yellow)" href="https://github.com/kiss42"><span class="tag"><span>Code</span><span>01</span></span><span class="name">GitHub <span class="arrow">↗</span></span></a>
+      <a class="card in" style="--i:7; --c: var(--cyan)" href="#"><span class="tag"><span>Network</span><span>02</span></span><span class="name">LinkedIn <span class="arrow">↗</span></span></a>
+      <a class="card in" style="--i:8; --c: var(--pink)" href="#"><span class="tag"><span>Photos</span><span>03</span></span><span class="name">Instagram <span class="arrow">↗</span></span></a>
+      <a class="card in" style="--i:9; --c: var(--lime)" href="#"><span class="tag"><span>Updates</span><span>04</span></span><span class="name">X <span class="arrow">↗</span></span></a>
+      <a class="card in" style="--i:10; --c: var(--orange)" href="#"><span class="tag"><span>Video</span><span>05</span></span><span class="name">YouTube <span class="arrow">↗</span></span></a>
+      <a class="card in" style="--i:11; --c: var(--cyan)" href="#"><span class="tag"><span>Work</span><span>06</span></span><span class="name">Portfolio <span class="arrow">↗</span></span></a>
     </div>
     <div class="mail">
       <span>Email</span>
@@ -130,33 +159,39 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--aqua); outline-
     </div>
   </section>
 
-  <div class="ticker" aria-hidden="true">
-    <div class="track" id="track"></div>
+  <div class="bands" aria-hidden="true">
+    <div class="band"><div class="track" id="t1"></div></div>
+    <div class="band b2"><div class="track" id="t2"></div></div>
   </div>
 
   <section>
-    <h2>Right now <small>/ status</small></h2>
+    <h2>Right now <small>/ live</small></h2>
     <dl class="now">
       <div><dt>Status</dt><dd>Open to new projects</dd></div>
       <div><dt>Building</dt><dd>This link page</dd></div>
-      <div><dt>Local time</dt><dd id="clock">--:--</dd></div>
+      <div><dt>Local time</dt><dd id="clock">--:--:--</dd></div>
       <div><dt>Last updated</dt><dd>October 2026</dd></div>
     </dl>
   </section>
 
-  <footer><span>© 2026 Steven Pierre</span><span>Drag the shape. Hover the cards.</span></footer>
+  <footer><span>© 2026 Steven Pierre</span><span>Drag the knot. Hover the name.</span></footer>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var fine = window.matchMedia('(pointer: fine)').matches;
+  var COLORS = ['#ff2e93', '#ffe600', '#00e5ff', '#b6ff00', '#ff7a1a', '#fff7ff'];
 
-  /* Ticker */
-  var words = ['Steven Pierre', 'Builder', 'Creator', 'Open to work', 'Say hello'];
-  var t = document.getElementById('track'), html = '';
-  for (var r = 0; r < 4; r++) words.forEach(function (w) { html += '<span>' + w + '</span>'; });
-  t.innerHTML = html;
+  /* Greeting by local time */
+  var h = new Date().getHours();
+  document.getElementById('hello').textContent = (h < 5 ? 'Up late?' : h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', welcome';
+
+  /* Tickers */
+  function fill(id, words) { var s = ''; for (var r = 0; r < 6; r++) words.forEach(function (w) { s += '<span>' + w + ' ✦</span>'; }); document.getElementById(id).innerHTML = s; }
+  fill('t1', ['Steven Pierre', 'Builder', 'Creator', 'Open to work']);
+  fill('t2', ['Say hello', 'Let\'s make something', 'Scroll less', 'Click more']);
 
   /* Typed roles */
   var roles = ['Builder of things.', 'Designer of experiments.', 'Always shipping.', 'Say hello below.'];
@@ -164,50 +199,85 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--aqua); outline-
   function type() {
     var s = roles[ri];
     el.textContent = s.slice(0, ci);
-    if (!del && ci === s.length) { del = true; return setTimeout(type, 1600); }
+    if (!del && ci === s.length) { del = true; return setTimeout(type, 1500); }
     if (del && ci === 0) { del = false; ri = (ri + 1) % roles.length; }
     ci += del ? -1 : 1;
-    setTimeout(type, del ? 28 : 70);
+    setTimeout(type, del ? 25 : 65);
   }
   if (reduce) el.textContent = roles[0]; else type();
 
-  /* Name scramble */
-  var nameEl = document.getElementById('name'), final = nameEl.textContent, chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&@';
-  if (!reduce) {
-    var f = 0;
-    var iv = setInterval(function () {
-      f++;
-      nameEl.textContent = final.split('').map(function (c, i) {
-        return c === ' ' || i < f / 2 ? c : chars[Math.floor(Math.random() * chars.length)];
-      }).join('');
-      if (f / 2 >= final.length) { clearInterval(iv); nameEl.textContent = final; }
-    }, 40);
-  }
-
   /* Clock */
   var clock = document.getElementById('clock');
-  function tick() { clock.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
-  tick(); setInterval(tick, 15000);
+  function tick() { clock.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
+  tick(); setInterval(tick, 1000);
 
   /* Copy email */
   var btn = document.getElementById('copy'), addr = document.getElementById('addr');
-  btn.addEventListener('click', function () {
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
     var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); };
     var fallback = function () { var r = document.createRange(); r.selectNodeContents(addr); var s = getSelection(); s.removeAllRanges(); s.addRange(r); };
     if (navigator.clipboard) navigator.clipboard.writeText(addr.textContent).then(done, fallback); else fallback();
   });
 
-  /* Card tilt */
-  if (!reduce && window.matchMedia('(pointer: fine)').matches) {
+  /* Card tilt + magnetic buttons + cursor */
+  var cur = document.getElementById('cursor'), cx = 0, cy = 0, px = 0, py = 0;
+  if (fine && !reduce) {
+    addEventListener('pointermove', function (e) { cx = e.clientX; cy = e.clientY; });
+    (function follow() { px += (cx - px) * .22; py += (cy - py) * .22; cur.style.transform = 'translate(' + px + 'px,' + py + 'px)'; requestAnimationFrame(follow); })();
+    document.querySelectorAll('a, button').forEach(function (n) {
+      n.addEventListener('pointerenter', function () { cur.classList.add('big'); });
+      n.addEventListener('pointerleave', function () { cur.classList.remove('big'); });
+    });
     document.querySelectorAll('.card').forEach(function (c) {
       c.addEventListener('pointermove', function (e) {
         var b = c.getBoundingClientRect(), x = (e.clientX - b.left) / b.width, y = (e.clientY - b.top) / b.height;
-        c.style.transform = 'rotateY(' + ((x - .5) * 16) + 'deg) rotateX(' + ((.5 - y) * 16) + 'deg) translateZ(8px)';
-        c.style.setProperty('--mx', (x * 100) + '%'); c.style.setProperty('--my', (y * 100) + '%');
+        c.style.transform = 'rotateY(' + ((x - .5) * 18) + 'deg) rotateX(' + ((.5 - y) * 18) + 'deg) translateZ(10px)';
       });
       c.addEventListener('pointerleave', function () { c.style.transform = ''; });
     });
+    document.querySelectorAll('.mag').forEach(function (m) {
+      m.addEventListener('pointermove', function (e) {
+        var b = m.getBoundingClientRect();
+        m.style.transform = 'translate(' + ((e.clientX - b.left - b.width / 2) * .25) + 'px,' + ((e.clientY - b.top - b.height / 2) * .35) + 'px)';
+      });
+      m.addEventListener('pointerleave', function () { m.style.transform = ''; });
+    });
   }
+
+  /* Confetti */
+  var fx = document.getElementById('fx'), fc = fx.getContext('2d'), bits = [], fxOn = false;
+  function fxSize() { fx.width = innerWidth; fx.height = innerHeight; }
+  addEventListener('resize', fxSize); fxSize();
+  function burst(x, y) {
+    if (reduce) return;
+    for (var i = 0; i < 70; i++) {
+      var a = Math.random() * 6.283, s = 3 + Math.random() * 9;
+      bits.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 4, w: 5 + Math.random() * 7, hh: 3 + Math.random() * 5, r: Math.random() * 6, vr: (Math.random() - .5) * .4, c: COLORS[i % COLORS.length], life: 1 });
+    }
+    if (!fxOn) { fxOn = true; requestAnimationFrame(fxLoop); }
+  }
+  function fxLoop() {
+    fc.clearRect(0, 0, fx.width, fx.height);
+    bits = bits.filter(function (b) { return b.life > 0; });
+    bits.forEach(function (b) {
+      b.vy += .28; b.vx *= .985; b.x += b.vx; b.y += b.vy; b.r += b.vr; b.life -= .012;
+      fc.save(); fc.globalAlpha = Math.max(b.life, 0); fc.translate(b.x, b.y); fc.rotate(b.r); fc.fillStyle = b.c; fc.fillRect(-b.w / 2, -b.hh / 2, b.w, b.hh); fc.restore();
+    });
+    if (bits.length) requestAnimationFrame(fxLoop); else { fxOn = false; fc.clearRect(0, 0, fx.width, fx.height); }
+  }
+
+  /* Warp control (shared with the 3D stage) */
+  var warpHold = false, warp = 1, holdTimer;
+  addEventListener('keydown', function (e) { if (e.code === 'Space' && !/^(BUTTON|A|INPUT)$/.test(e.target.tagName)) { e.preventDefault(); warpHold = true; } });
+  addEventListener('keyup', function (e) { if (e.code === 'Space') warpHold = false; });
+  addEventListener('pointerdown', function (e) {
+    burst(e.clientX, e.clientY);
+    warp = Math.max(warp, 9);
+    clearTimeout(holdTimer); holdTimer = setTimeout(function () { warpHold = true; }, 350);
+  });
+  addEventListener('pointerup', function () { clearTimeout(holdTimer); warpHold = false; });
+  addEventListener('pointercancel', function () { clearTimeout(holdTimer); warpHold = false; });
 
   /* 3D stage */
   var canvas = document.getElementById('stage');
@@ -215,54 +285,76 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--aqua); outline-
   var renderer;
   try { renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true }); } catch (e) { return; }
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-  var scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(50, 1, .1, 100);
-  cam.position.z = 7;
+  var scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(60, 1, .1, 200);
+  cam.position.z = 8;
 
   var group = new THREE.Group(); scene.add(group);
-  var core = new THREE.Mesh(new THREE.IcosahedronGeometry(1.6, 1), new THREE.MeshBasicMaterial({ color: 0xffd23f, wireframe: true }));
-  var inner = new THREE.Mesh(new THREE.IcosahedronGeometry(1.1, 0), new THREE.MeshBasicMaterial({ color: 0x4ff0d2, wireframe: true, transparent: true, opacity: .55 }));
-  var ring = new THREE.Mesh(new THREE.TorusGeometry(2.5, .012, 8, 120), new THREE.MeshBasicMaterial({ color: 0x4ff0d2 }));
-  var ring2 = new THREE.Mesh(new THREE.TorusGeometry(3.1, .008, 8, 120), new THREE.MeshBasicMaterial({ color: 0xffd23f, transparent: true, opacity: .6 }));
-  ring.rotation.x = 1.2; ring2.rotation.y = 1.1;
-  group.add(core, inner, ring, ring2);
+  var knot = new THREE.Mesh(new THREE.TorusKnotGeometry(1.5, .46, 220, 28, 2, 3), new THREE.MeshNormalMaterial({ flatShading: true }));
+  var wire = new THREE.Mesh(new THREE.TorusKnotGeometry(1.5, .5, 120, 14, 2, 3), new THREE.MeshBasicMaterial({ color: 0xffe600, wireframe: true, transparent: true, opacity: .35 }));
+  var ringA = new THREE.Mesh(new THREE.TorusGeometry(3.1, .02, 8, 160), new THREE.MeshBasicMaterial({ color: 0x00e5ff }));
+  var ringB = new THREE.Mesh(new THREE.TorusGeometry(3.7, .015, 8, 160), new THREE.MeshBasicMaterial({ color: 0xff2e93 }));
+  ringA.rotation.x = 1.2; ringB.rotation.y = 1.15;
+  group.add(knot, wire, ringA, ringB);
 
-  var n = 900, pos = new Float32Array(n * 3);
-  for (var i = 0; i < n; i++) {
-    var rad = 4 + Math.random() * 9, th = Math.random() * 6.283, ph = Math.acos(2 * Math.random() - 1);
-    pos[i * 3] = rad * Math.sin(ph) * Math.cos(th); pos[i * 3 + 1] = rad * Math.sin(ph) * Math.sin(th); pos[i * 3 + 2] = rad * Math.cos(ph);
+  /* Starfield streaks */
+  var N = 1400, SP = 60, sp = new Float32Array(N * 6), sx = new Float32Array(N), sy = new Float32Array(N), sz = new Float32Array(N), col = new Float32Array(N * 6);
+  var pal = [[1, .18, .58], [1, .9, 0], [0, .9, 1], [.71, 1, 0], [1, 1, 1]];
+  for (var i = 0; i < N; i++) {
+    var ang = Math.random() * 6.283, rr = 3.5 + Math.random() * 22;
+    sx[i] = Math.cos(ang) * rr; sy[i] = Math.sin(ang) * rr; sz[i] = -Math.random() * SP + 10;
+    var c = pal[i % pal.length];
+    for (var k = 0; k < 2; k++) { col[i * 6 + k * 3] = c[0]; col[i * 6 + k * 3 + 1] = c[1]; col[i * 6 + k * 3 + 2] = c[2]; }
   }
-  var pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-  var pts = new THREE.Points(pg, new THREE.PointsMaterial({ color: 0xeaf5f2, size: .03, transparent: true, opacity: .7 }));
-  scene.add(pts);
+  var sg = new THREE.BufferGeometry();
+  sg.setAttribute('position', new THREE.BufferAttribute(sp, 3));
+  sg.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  scene.add(new THREE.LineSegments(sg, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: .85 })));
 
-  var mx = 0, my = 0, tx = 0, ty = 0, dragging = false, lx = 0, ly = 0, spin = 0, spinY = 0, sy = 0;
+  var mx = 0, my = 0, tx = 0, ty = 0, dragging = false, lx = 0, ly = 0, spin = 0, spinY = 0, sc = 0;
   addEventListener('pointermove', function (e) {
     mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5;
-    if (dragging) { spin += (e.clientX - lx) * .01; spinY += (e.clientY - ly) * .01; lx = e.clientX; ly = e.clientY; }
+    if (dragging) { spin += (e.clientX - lx) * .012; spinY += (e.clientY - ly) * .012; lx = e.clientX; ly = e.clientY; }
   });
-  addEventListener('pointerdown', function (e) { if (e.target === document.documentElement || e.target.closest('.hero, .top, footer')) { dragging = true; lx = e.clientX; ly = e.clientY; } });
+  addEventListener('pointerdown', function (e) { if (!e.target.closest('a, button, .card, .mail')) { dragging = true; lx = e.clientX; ly = e.clientY; } });
   addEventListener('pointerup', function () { dragging = false; });
-  addEventListener('scroll', function () { sy = scrollY / Math.max(1, document.body.scrollHeight - innerHeight); }, { passive: true });
+  addEventListener('scroll', function () { sc = scrollY / Math.max(1, document.body.scrollHeight - innerHeight); }, { passive: true });
 
   function size() {
-    var w = innerWidth, h = innerHeight;
-    renderer.setSize(w, h, false); cam.aspect = w / h;
-    group.position.x = w > 800 ? 2.6 : 0; group.position.y = w > 800 ? 0 : 1.6;
-    group.scale.setScalar(w > 800 ? 1 : .75);
+    var w = innerWidth, hgt = innerHeight;
+    renderer.setSize(w, hgt, false); cam.aspect = w / hgt;
+    var wide = w > 800;
+    group.position.set(wide ? 4.3 : 0, wide ? 0 : 2.4, 0);
+    group.scale.setScalar(wide ? .95 : .8);
     cam.updateProjectionMatrix();
   }
   addEventListener('resize', size); size();
 
-  var clockT = new THREE.Clock();
+  var clk = new THREE.Clock(), last = 0;
   function frame() {
-    var t = clockT.getElapsedTime();
+    var t = clk.getElapsedTime(), dt = Math.min(t - last, .05); last = t;
+    var target = warpHold ? 14 : 1;
+    warp += (target - warp) * (warpHold ? .08 : .04);
     tx += (mx - tx) * .05; ty += (my - ty) * .05;
-    core.rotation.y = t * .25 + spin; core.rotation.x = t * .15 + spinY;
-    inner.rotation.y = -t * .4 + spin; inner.rotation.x = -t * .3 + spinY;
-    ring.rotation.z = t * .3; ring2.rotation.x = t * .2;
-    var s = 1 + Math.sin(t * 1.5) * .04; core.scale.setScalar(s);
-    pts.rotation.y = t * .02 + sy * 1.5;
-    cam.position.x = tx * 1.5; cam.position.y = -ty * 1.2 - sy * 1.5; cam.lookAt(0, -sy * 1.5, 0);
+
+    var pulse = 1 + Math.sin(t * 2) * .03 + (warp - 1) * .012;
+    knot.scale.setScalar(pulse); wire.scale.setScalar(pulse * 1.04);
+    knot.rotation.y = t * .35 + spin; knot.rotation.x = t * .2 + spinY;
+    wire.rotation.copy(knot.rotation); wire.rotation.z = -t * .1;
+    ringA.rotation.z = t * .5; ringB.rotation.x = t * .3;
+    group.position.y += (((innerWidth > 800 ? 0 : 2.4) + Math.sin(t) * .15 + sc * 2) - group.position.y) * .1;
+
+    var speed = (5 + sc * 6) * warp * dt, len = .5 + warp * .9;
+    for (var i = 0; i < N; i++) {
+      sz[i] += speed; if (sz[i] > 10) sz[i] -= SP;
+      var o = i * 6;
+      sp[o] = sx[i]; sp[o + 1] = sy[i]; sp[o + 2] = sz[i];
+      sp[o + 3] = sx[i]; sp[o + 4] = sy[i]; sp[o + 5] = sz[i] - len;
+    }
+    sg.attributes.position.needsUpdate = true;
+
+    cam.position.x = tx * 2; cam.position.y = -ty * 1.6;
+    cam.lookAt(group.position.x * .4, 0, 0);
+    cam.fov = 60 + (warp - 1) * 1.6; cam.updateProjectionMatrix();
     renderer.render(scene, cam);
     if (!reduce) requestAnimationFrame(frame);
   }
