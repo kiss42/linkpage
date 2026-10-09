@@ -42,11 +42,7 @@ body { margin: 0; background: var(--ink); color: var(--ivory); font: 400 1rem/1.
 #stage, #fx { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 #stage { z-index: 1; touch-action: none; }
 #fx { z-index: 50; pointer-events: none; }
-.glow { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-.glow i { position: absolute; width: 40rem; height: 40rem; border-radius: 50%; filter: blur(110px); background: var(--gold); opacity: .16; animation: drift 16s ease-in-out infinite alternate; }
-.glow i:nth-child(1) { left: -12rem; top: -10rem; }
-.glow i:nth-child(2) { right: -14rem; bottom: -12rem; animation-delay: -6s; opacity: .12; }
-@keyframes drift { to { transform: translate(5rem, 3rem) scale(1.15); } }
+.glow { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(48rem 36rem at 0% 0%, rgba(212,175,55,.16), transparent 65%), radial-gradient(44rem 34rem at 100% 100%, rgba(212,175,55,.12), transparent 65%); }
 .bgword { position: fixed; inset: 0; z-index: 0; display: grid; place-content: center; text-align: center; pointer-events: none; font: 400 clamp(3.2rem, 13.5vw, 14rem)/1 var(--f-dela); letter-spacing: -.02em; color: transparent; -webkit-text-stroke: 2px color-mix(in srgb, var(--gold) 20%, transparent); user-select: none; }
 .vert { position: fixed; left: 1.25rem; top: 50%; transform: translateY(-50%); z-index: 2; writing-mode: vertical-rl; font: 400 1rem var(--f-pixel); letter-spacing: .5em; color: var(--gold); opacity: .7; pointer-events: none; display: none; }
 @media (min-width: 900px) { .vert { display: block; } }
@@ -109,7 +105,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 </style>
 
 <canvas id="stage" aria-hidden="true"></canvas>
-<div class="glow" aria-hidden="true"><i></i><i></i></div>
+<div class="glow" aria-hidden="true"></div>
 <div class="bgword" aria-hidden="true">スティーブン<br>ピエール</div>
 <div class="vert" aria-hidden="true">リンクページ ・ STEVEN PIERRE</div>
 <canvas id="fx" aria-hidden="true"></canvas>
@@ -251,17 +247,18 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 
   /* ---------- 3D stage ---------- */
   var canvas = document.getElementById('stage');
+  var mobile = window.matchMedia('(pointer: coarse)').matches || innerWidth < 800, pr = Math.min(devicePixelRatio, mobile ? 1.5 : 2);
   var renderer, ok = !!window.THREE;
-  if (ok) { try { renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true }); } catch (e) { ok = false; } }
+  if (ok) { try { renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, powerPreference: 'high-performance' }); } catch (e) { ok = false; } }
   if (!ok) { document.getElementById('fallback').style.display = 'grid'; document.querySelector('.bar').style.display = 'none'; return; }
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(pr);
   var scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(45, 1, .1, 200);
   cam.position.z = 9;
   var HH = Math.tan(22.5 * Math.PI / 180) * 9, HW = HH;
 
   /* Gold dust streaks */
   var starGroup = new THREE.Group(); scene.add(starGroup);
-  var N = 900, SP = 60, sp = new Float32Array(N * 6), sx = new Float32Array(N), sy = new Float32Array(N), sz = new Float32Array(N), col = new Float32Array(N * 6);
+  var N = mobile ? 400 : 900, SP = 60, sp = new Float32Array(N * 6), sx = new Float32Array(N), sy = new Float32Array(N), sz = new Float32Array(N), col = new Float32Array(N * 6);
   var pal = [[1, .89, .48], [.83, .69, .22], [1, .96, .8], [.54, .42, .11], [1, 1, 1]];
   for (var i = 0; i < N; i++) {
     var ang = Math.random() * 6.283, rad = 3.5 + Math.random() * 22;
@@ -296,8 +293,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   function frameLine(c) { c.strokeStyle = GOLD; c.lineWidth = 3; c.globalAlpha = .75; rrect(c, 16, 16, TW - 32, TH - 32, 34); c.stroke(); c.globalAlpha = .3; c.lineWidth = 2; rrect(c, 26, 26, TW - 52, TH - 52, 26); c.stroke(); c.globalAlpha = 1; }
 
   var face = mk(TW, TH), fctx = face.getContext('2d');
-  var fire = mk(160, 240), firec = fire.getContext('2d');
+  var fire = mk(96, 144), firec = fire.getContext('2d'), outline = mk(TW, TH);
   var mask = mk(TW, TH), detail = mk(TW, TH), back = mk(TW, TH);
+  function drawOutline() { var o = outline.getContext('2d'); o.fillStyle = '#000'; o.fillRect(0, 0, TW, TH); o.fillStyle = '#fff'; rrect(o, 0, 0, TW, TH, 46); o.fill(); o.fillStyle = '#000'; rrect(o, TW / 2 - 64, 38, 128, 28, 14); o.fill(); o.beginPath(); o.arc(0, STUB_Y, 18, 0, 6.283); o.fill(); o.beginPath(); o.arc(TW, STUB_Y, 18, 0, 6.283); o.fill(); }
   var STUB_Y = TH * .8;
 
   function layers() {
@@ -345,29 +343,30 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
     seigaiha(b, .09); frameLine(b);
     b.strokeStyle = 'rgba(212,175,55,.6)'; b.lineWidth = 3; b.setLineDash([12, 10]); b.beginPath(); b.moveTo(36, STUB_Y); b.lineTo(TW - 36, STUB_Y); b.stroke(); b.setLineDash([]);
     b.restore(); punch(b);
+    /* front face: black layer with the word cut out + printed details, composed once. The fire is a separate plane behind it. */
+    var c = fctx; c.globalCompositeOperation = 'source-over'; c.clearRect(0, 0, TW, TH);
+    c.save(); rrect(c, 0, 0, TW, TH, 46); c.clip(); c.drawImage(mask, 0, 0); c.drawImage(detail, 0, 0); c.restore(); punch(c);
   }
 
   var tex = new THREE.CanvasTexture(face); tex.anisotropy = 4;
   var backTex = new THREE.CanvasTexture(back); backTex.anisotropy = 4;
-  function paint(t, tot) {
-    var f = firec, W2 = 160, H2 = 240;
+  var outlineTex = new THREE.CanvasTexture(outline), fireTex = new THREE.CanvasTexture(fire);
+  var sheenC = mk(256, 256), shc = sheenC.getContext('2d'), shg = shc.createLinearGradient(0, 0, 256, 256);
+  shg.addColorStop(0, 'rgba(255,248,220,0)'); shg.addColorStop(.5, 'rgba(255,248,220,.22)'); shg.addColorStop(1, 'rgba(255,248,220,0)'); shc.fillStyle = shg; shc.fillRect(0, 0, 256, 256);
+  var sheenTex = new THREE.CanvasTexture(sheenC); sheenTex.repeat.set(.45, 1);
+  var lastFire = -1;
+  function paintFire(t) {
+    var f = firec, W2 = 96, H2 = 144;
     f.globalCompositeOperation = 'source-over';
     var bg = f.createLinearGradient(0, 0, 0, H2); bg.addColorStop(0, '#9c7a1f'); bg.addColorStop(.5, '#d4af37'); bg.addColorStop(1, '#f6e27a'); f.fillStyle = bg; f.fillRect(0, 0, W2, H2);
     f.globalCompositeOperation = 'lighter';
-    for (var i = 0; i < 16; i++) {
-      var ph = (t * .08 + i / 16) % 1, y = H2 * (1.15 - ph * 1.4), x = W2 * (.5 + .55 * Math.sin(i * 2.3 + t * .5)), r = H2 * (.15 + .07 * Math.sin(i + t * .8));
+    for (var i = 0; i < 12; i++) {
+      var ph = (t * .08 + i / 12) % 1, y = H2 * (1.15 - ph * 1.4), x = W2 * (.5 + .55 * Math.sin(i * 2.3 + t * .5)), r = H2 * (.16 + .07 * Math.sin(i + t * .8));
       var gr = f.createRadialGradient(x, y, 0, x, y, r);
       gr.addColorStop(0, 'rgba(255,248,215,.85)'); gr.addColorStop(.45, 'rgba(240,200,80,.35)'); gr.addColorStop(1, 'rgba(200,150,30,0)');
       f.fillStyle = gr; f.fillRect(x - r, y - r, r * 2, r * 2);
     }
-    var c = fctx; c.globalCompositeOperation = 'source-over'; c.clearRect(0, 0, TW, TH);
-    c.save(); rrect(c, 0, 0, TW, TH, 46); c.clip();
-    c.drawImage(fire, 0, 0, TW, TH); c.drawImage(mask, 0, 0); c.drawImage(detail, 0, 0);
-    var sx2 = (.5 + Math.sin(tot) * .35 + Math.sin(t * .6) * .08) * (TW * 1.6) - TW * .3;
-    var sh = c.createLinearGradient(sx2 - 160, 0, sx2 + 160, TH * .6); sh.addColorStop(0, 'rgba(255,255,255,0)'); sh.addColorStop(.5, 'rgba(255,248,220,.2)'); sh.addColorStop(1, 'rgba(255,255,255,0)');
-    c.fillStyle = sh; c.fillRect(0, 0, TW, TH);
-    c.restore(); punch(c);
-    tex.needsUpdate = true;
+    fireTex.needsUpdate = true; lastFire = t;
   }
 
   var strapC = mk(128, 512), sc2 = strapC.getContext('2d');
@@ -382,8 +381,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   }
 
   var FONT_JOBS = [['400 40px "Dela Gothic One"', 'ハローAa'], ['400 20px "DotGothic16"', '通行証クリエイター入場期間舞台スティーブン・ピエールABC裏リンク'], ['800 40px "Shippori Mincho"', 'Steven Pierre All areas Every day Everything スティーブン'], ['400 40px "Rampart One"', 'Instagram'], ['400 40px "Train One"', 'YouTube'], ['400 40px "Reggae One"', 'Portfolio']];
-  function refresh() { layers(); drawStrap(); backTex.needsUpdate = true; }
-  refresh(); paint(0, 0);
+  function refresh() { layers(); drawOutline(); drawStrap(); tex.needsUpdate = true; backTex.needsUpdate = true; outlineTex.needsUpdate = true; }
+  refresh(); paintFire(0);
   if (document.fonts && document.fonts.load) Promise.all(FONT_JOBS.map(function (j) { return document.fonts.load(j[0], j[1]); })).then(refresh, refresh);
   ['in-word', 'in-name'].forEach(function (id) {
     document.getElementById(id).addEventListener('input', function () {
@@ -395,12 +394,15 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   /* ---------- Pass + strap meshes ---------- */
   var BW = 2.4, BH = 3.6, TOPOFF = BH * .07;
   var pivot = new THREE.Group(), card = new THREE.Group(); pivot.add(card); scene.add(pivot);
-  var frontM = new THREE.MeshBasicMaterial({ map: tex, alphaTest: .35 }), backM = new THREE.MeshBasicMaterial({ map: backTex, alphaTest: .35 });
   var geo = new THREE.PlaneGeometry(BW, BH);
-  var front = new THREE.Mesh(geo, frontM); front.position.z = .012;
+  var T = { transparent: true, depthWrite: false };
+  var backM = new THREE.MeshBasicMaterial({ map: backTex, alphaTest: .35 });
   var rear = new THREE.Mesh(geo, backM); rear.rotation.y = Math.PI; rear.position.z = -.012;
-  var edge = new THREE.Mesh(new THREE.PlaneGeometry(BW * 1.014, BH * 1.01), new THREE.MeshBasicMaterial({ color: 0xb8902a, alphaTest: .5, side: THREE.DoubleSide }));
-  card.add(front, rear, edge);
+  var edge = new THREE.Mesh(new THREE.PlaneGeometry(BW * 1.014, BH * 1.01), new THREE.MeshBasicMaterial({ color: 0xb8902a, alphaMap: outlineTex, alphaTest: .5, side: THREE.DoubleSide }));
+  var fireP = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: fireTex, alphaMap: outlineTex, transparent: true, depthWrite: false })); fireP.position.z = .004; fireP.renderOrder = 1;
+  var front = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false })); front.position.z = .012; front.renderOrder = 2;
+  var sheenP = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({ map: sheenTex, alphaMap: outlineTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending })); sheenP.position.z = .016; sheenP.renderOrder = 3;
+  card.add(rear, edge, fireP, front, sheenP);
 
   var NSEG = 9, strapGeo = new THREE.BufferGeometry();
   var spos = new Float32Array((NSEG + 1) * 6), suv = new Float32Array((NSEG + 1) * 4), sidx = [];
@@ -417,7 +419,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   var ry = 0, rx = 0, flip = 0, flipTarget = 0, grab = null, gx = 0, gy = 0, hover = false, cprev = { x: 0, y: 0 }, g0 = null;
   function build() {
     HW = HH * (innerWidth / innerHeight);
-    S = Math.min(1.45, (HW * 2 * .8) / BW, (HH * 2 * .62) / BH);
+    S = Math.min(1.45, (HW * 2 * .68) / BW, (HH * 2 * .6) / BH);
     anchor.x = 0; anchor.y = HH + .45;
     Ls = .15 * S; Hb = BH * S * .86; pts = [];
     for (var i = 0; i <= NSEG; i++) pts.push(P(anchor.x, anchor.y - i * Ls, i === 0 ? 0 : 1));
@@ -466,7 +468,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
       p.px = p.x; p.py = p.y; p.x += vx; p.y += vy - 42 * dt * dt;
     }
     if (grab) { var ox = grab.x, oy = grab.y; grab.x += (gx - grab.x) * .45; grab.y += (gy - grab.y) * .45; grab.px = ox; grab.py = oy; }
-    for (var it = 0; it < 16; it++) {
+    for (var it = 0; it < 10; it++) {
       pts[0].x = anchor.x; pts[0].y = anchor.y;
       for (var j = 0; j < NSEG; j++) sat(pts[j], pts[j + 1], Ls);
       sat(A, B, Hb);
@@ -492,21 +494,22 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
     var w = innerWidth, hgt = innerHeight;
     renderer.setSize(w, hgt, false); cam.aspect = w / hgt; cam.updateProjectionMatrix();
     HW = HH * (w / hgt);
+    document.getElementById('bwrap').style.perspective = (9 * hgt / (2 * HH)) + 'px';
     if (w !== lastW) { lastW = w; build(); }
   }
   addEventListener('resize', size); size();
 
   var backEl = document.getElementById('back'), bwrap = document.getElementById('bwrap');
+  var wasShowing = false;
   function placeBack(c, total) {
-    var pxu = innerHeight / (2 * HH), D = 9 * pxu;
-    var sxp = (c.cx / HW + 1) / 2 * innerWidth, syp = (1 - c.cy / HH) / 2 * innerHeight;
-    var u = pxu * BW * S / TW, showing = Math.cos(total) < -.02;
-    bwrap.style.perspective = D + 'px';
-    backEl.style.visibility = showing ? 'visible' : 'hidden';
+    var showing = Math.cos(total) < -.02;
+    if (showing !== wasShowing) { wasShowing = showing; backEl.style.visibility = showing ? 'visible' : 'hidden'; }
+    if (!showing) return;
+    var pxu = innerHeight / (2 * HH), sxp = (c.cx / HW + 1) / 2 * innerWidth, syp = (1 - c.cy / HH) / 2 * innerHeight, u = pxu * BW * S / TW;
     backEl.style.transform = 'translate3d(' + (sxp - TW / 2) + 'px,' + (syp - TH / 2) + 'px,0) rotate(' + (-c.phi) + 'rad) rotateX(' + (-rx) + 'rad) rotateY(' + (total - Math.PI) + 'rad) scale(' + u + ')';
   }
 
-  var clk = new THREE.Clock(), last = 0, acc = 0;
+  var clk = new THREE.Clock(), last = 0, acc = 0, qT = 0, qN = 0;
   function frame() {
     var t = clk.getElapsedTime(), dt = Math.min(t - last, .05); last = t;
     var target = warpHold ? 14 : 1;
@@ -523,9 +526,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
     pivot.position.set(c.cx, c.cy, 0); pivot.rotation.z = c.phi; card.rotation.y = total; card.rotation.x = rx;
     clipG.position.set(A.x, A.y, 0); clipG.rotation.z = c.phi;
     updateStrap();
-    paint(reduce ? 0 : t, total);
+    if (!reduce && t - lastFire > .055) paintFire(t);
+    sheenTex.offset.x = -.45 + 1.45 * ((t * .12) % 1) + Math.sin(total) * .2;
     placeBack(c, total);
 
+    qT += dt; qN++;
+    if (qN === 90) { if (qT / qN > 1 / 38 && pr > 1) { pr = 1; renderer.setPixelRatio(1); size(); } qT = 0; qN = 0; }
     var speed = 4 * warp * dt, len = .5 + warp * .9;
     for (var s2 = 0; s2 < N; s2++) {
       sz[s2] += speed; if (sz[s2] > 10) sz[s2] -= SP;
