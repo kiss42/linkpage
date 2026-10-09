@@ -1,103 +1,109 @@
 <title>Steven Pierre</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=DotGothic16&family=Rampart+One&family=Train+One&family=Reggae+One&family=Shippori+Mincho:wght@500;800&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* Layout: one screen. A lanyard badge is the whole page; flip it and the links are printed on the back. */
+/* Layout: one screen. A black-and-gold anime pass hangs on a lanyard; flip it and each link is printed in its own show-off Japanese display face. */
 :root {
-  --ink: #07050d;
-  --panel: #130f20;
-  --line: #2a2142;
-  --text: #fff7ff;
-  --muted: #a99bc6;
-  --pink: #ff2e93;
-  --yellow: #ffe600;
-  --cyan: #00e5ff;
-  --lime: #b6ff00;
-  --orange: #ff7a1a;
-  --f-display: "Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
+  --ink: #050505;
+  --panel: #0e0b05;
+  --line: #3a2e10;
+  --ivory: #f4ecd8;
+  --muted: #a8966a;
+  --gold: #d4af37;
+  --gold-hi: #f6e27a;
+  --gold-lo: #8a6a1c;
+  --gold-grad: linear-gradient(135deg, #f6e27a 0%, #d4af37 45%, #8a6a1c 100%);
+  --f-dela: "Dela Gothic One", "Arial Black", system-ui, sans-serif;
+  --f-pixel: "DotGothic16", ui-monospace, Menlo, Consolas, monospace;
+  --f-ramp: "Rampart One", "Dela Gothic One", system-ui, sans-serif;
+  --f-train: "Train One", "Dela Gothic One", system-ui, sans-serif;
+  --f-reggae: "Reggae One", "Dela Gothic One", system-ui, sans-serif;
+  --f-mincho: "Shippori Mincho", "Hiragino Mincho ProN", "Yu Mincho", serif;
   --f-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
 html, body { height: 100%; }
-body { margin: 0; background: var(--ink); color: var(--text); font: 400 1rem/1.5 var(--f-body); overflow: hidden; overscroll-behavior: none; }
+body { margin: 0; background: var(--ink); color: var(--ivory); font: 400 1rem/1.5 var(--f-body); overflow: hidden; overscroll-behavior: none; }
 #stage, #fx { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 #stage { z-index: 1; touch-action: none; }
 #fx { z-index: 50; pointer-events: none; }
-.blobs { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-.blobs i { position: absolute; width: 38rem; height: 38rem; border-radius: 50%; filter: blur(90px); opacity: .32; animation: drift 14s ease-in-out infinite alternate; }
-.blobs i:nth-child(1) { background: var(--pink); left: -10rem; top: -8rem; }
-.blobs i:nth-child(2) { background: var(--cyan); right: -12rem; top: 30%; animation-delay: -5s; opacity: .2; }
-.blobs i:nth-child(3) { background: var(--orange); left: 30%; bottom: -16rem; animation-delay: -9s; opacity: .2; }
-@keyframes drift { to { transform: translate(6rem, 4rem) scale(1.2); } }
-.bgword { position: fixed; inset: 0; z-index: 0; display: grid; place-items: center; text-align: center; pointer-events: none; font: 800 clamp(5rem, 22vw, 20rem)/.85 var(--f-display); letter-spacing: -.05em; color: transparent; -webkit-text-stroke: 2px color-mix(in srgb, var(--text) 10%, transparent); text-transform: uppercase; user-select: none; }
+.glow { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
+.glow i { position: absolute; width: 40rem; height: 40rem; border-radius: 50%; filter: blur(110px); background: var(--gold); opacity: .16; animation: drift 16s ease-in-out infinite alternate; }
+.glow i:nth-child(1) { left: -12rem; top: -10rem; }
+.glow i:nth-child(2) { right: -14rem; bottom: -12rem; animation-delay: -6s; opacity: .12; }
+@keyframes drift { to { transform: translate(5rem, 3rem) scale(1.15); } }
+.bgword { position: fixed; inset: 0; z-index: 0; display: grid; place-content: center; text-align: center; pointer-events: none; font: 400 clamp(3.2rem, 13.5vw, 14rem)/1 var(--f-dela); letter-spacing: -.02em; color: transparent; -webkit-text-stroke: 2px color-mix(in srgb, var(--gold) 20%, transparent); user-select: none; }
+.vert { position: fixed; left: 1.25rem; top: 50%; transform: translateY(-50%); z-index: 2; writing-mode: vertical-rl; font: 400 1rem var(--f-pixel); letter-spacing: .5em; color: var(--gold); opacity: .7; pointer-events: none; display: none; }
+@media (min-width: 900px) { .vert { display: block; } }
 
-.top, .bar { position: fixed; left: 0; right: 0; z-index: 4; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-inline: 1.25rem; font: 500 .8rem var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.top, .bar { position: fixed; left: 0; right: 0; z-index: 4; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-inline: 1.25rem; font: 400 .9rem var(--f-pixel); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 .top { top: 0; padding-block: 1.1rem; }
-.live { display: inline-flex; align-items: center; gap: .55rem; color: var(--lime); }
-.live i { width: .6rem; height: .6rem; border-radius: 50%; background: var(--lime); animation: ping 1.4s infinite; }
-@keyframes ping { 0% { box-shadow: 0 0 0 0 var(--lime); } 80%, 100% { box-shadow: 0 0 0 .8rem transparent; } }
+.live { display: inline-flex; align-items: center; gap: .55rem; color: var(--gold-hi); }
+.live i { width: .6rem; height: .6rem; border-radius: 50%; background: var(--gold-hi); animation: ping 1.4s infinite; }
+@keyframes ping { 0% { box-shadow: 0 0 0 0 var(--gold); } 80%, 100% { box-shadow: 0 0 0 .8rem transparent; } }
 
 .bar { bottom: 0; padding-block: 1rem; flex-wrap: wrap; justify-content: center; background: linear-gradient(0deg, var(--ink) 30%, transparent); pointer-events: none; }
 .bar > * { pointer-events: auto; }
-.hint { margin: 0; text-transform: none; letter-spacing: 0; font-size: .8rem; text-align: center; flex-basis: 100%; }
-kbd { font: 500 .75rem var(--f-mono); border: 1px solid var(--muted); border-bottom-width: 3px; border-radius: .3rem; padding: .05rem .4rem; color: var(--text); }
-.btn { font: 800 1rem var(--f-display); letter-spacing: -.01em; text-transform: none; padding: .8rem 1.5rem; border-radius: 99px; border: 2px solid var(--pink); color: var(--ink); background: var(--pink); cursor: pointer; transition: box-shadow .2s; }
-.btn:hover, .btn:focus-visible { box-shadow: 0 0 0 6px color-mix(in srgb, var(--yellow) 55%, transparent), 0 0 40px var(--pink); }
-.btn.ghost { background: transparent; color: var(--text); border-color: var(--cyan); }
+.hint { margin: 0; text-transform: none; letter-spacing: .02em; font-size: .85rem; text-align: center; flex-basis: 100%; }
+kbd { font: 400 .8rem var(--f-pixel); border: 1px solid var(--gold-lo); border-bottom-width: 3px; border-radius: .3rem; padding: .05rem .4rem; color: var(--gold-hi); }
+.btn { font: 400 1rem var(--f-dela); letter-spacing: .02em; text-transform: none; padding: .8rem 1.5rem; border-radius: 99px; border: 2px solid var(--gold); color: var(--ink); background: var(--gold-grad); cursor: pointer; transition: box-shadow .2s, transform .2s; }
+.btn:hover, .btn:focus-visible { box-shadow: 0 0 0 5px color-mix(in srgb, var(--gold) 35%, transparent), 0 0 38px color-mix(in srgb, var(--gold) 70%, transparent); }
+.btn.ghost { background: transparent; color: var(--gold-hi); }
 .edit { position: relative; }
 .edit summary { list-style: none; }
 .edit summary::-webkit-details-marker { display: none; }
-.edit .panel { position: absolute; bottom: calc(100% + .7rem); left: 50%; transform: translateX(-50%); display: grid; gap: .6rem; width: min(86vw, 19rem); padding: .9rem; background: var(--panel); border: 2px solid var(--line); border-radius: .8rem; text-transform: none; letter-spacing: 0; }
-.edit label { display: grid; gap: .25rem; font: 500 .7rem var(--f-mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
-.edit input { font: 500 1rem var(--f-body); color: var(--text); background: var(--ink); border: 2px solid var(--line); border-radius: .5rem; padding: .5rem .65rem; width: 100%; }
-.edit input:focus-visible { outline: 3px solid var(--cyan); outline-offset: 1px; border-color: var(--cyan); }
+.edit .panel { position: absolute; bottom: calc(100% + .7rem); left: 50%; transform: translateX(-50%); display: grid; gap: .6rem; width: min(86vw, 19rem); padding: .9rem; background: var(--panel); border: 2px solid var(--gold-lo); border-radius: .8rem; text-transform: none; letter-spacing: 0; }
+.edit label { display: grid; gap: .25rem; font: 400 .8rem var(--f-pixel); color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+.edit input { font: 500 1rem var(--f-body); color: var(--ivory); background: var(--ink); border: 2px solid var(--line); border-radius: .5rem; padding: .5rem .65rem; width: 100%; }
+.edit input:focus-visible { outline: 3px solid var(--gold-hi); outline-offset: 1px; border-color: var(--gold); }
 
-/* The back of the badge: real links, laid over the 3D card and moved with it each frame. */
+/* Back of the badge: real links laid over the 3D card and moved with it each frame. */
 .bwrap { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
-.back { position: absolute; left: 0; top: 0; width: 640px; height: 960px; visibility: hidden; pointer-events: none; will-change: transform; color: var(--text); }
-.back h2 { position: absolute; left: 48px; right: 48px; top: 70px; margin: 0; display: flex; justify-content: space-between; font: 500 22px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--yellow); }
-.back h2 span:last-child { color: rgba(255,255,255,.6); }
-.links { position: absolute; left: 48px; right: 48px; top: 125px; display: grid; gap: 12px; }
-.link { --c: var(--pink); position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 84px; padding: 0 28px; overflow: hidden; border: 3px solid var(--c); border-radius: 42px; color: var(--text); text-decoration: none; pointer-events: auto; background: rgba(10,10,14,.75); transition: color .2s, background .2s; }
-.link .nm { font: 800 38px/1 var(--f-display); letter-spacing: -.02em; }
-.link .tg { font: 500 17px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--c); margin-left: auto; margin-right: 10px; }
-.link .ar { font: 500 30px var(--f-mono); color: var(--c); }
-.link:hover, .link:focus-visible { background: var(--c); color: var(--ink); }
+.back { position: absolute; left: 0; top: 0; width: 640px; height: 960px; visibility: hidden; pointer-events: none; will-change: transform; color: var(--ivory); }
+.back h2 { position: absolute; left: 56px; right: 56px; top: 104px; margin: 0; display: flex; justify-content: space-between; align-items: baseline; font: 400 24px var(--f-pixel); letter-spacing: .12em; text-transform: uppercase; color: var(--gold-hi); }
+.back h2 span:last-child { color: var(--muted); }
+.links { position: absolute; left: 56px; right: 56px; top: 156px; display: grid; gap: 11px; }
+.link { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 80px; padding: 0 26px; overflow: hidden; border: 2px solid var(--gold); border-radius: 12px; color: var(--ivory); text-decoration: none; pointer-events: auto; background: linear-gradient(90deg, rgba(212,175,55,.14), rgba(5,5,5,.8) 60%); transition: color .2s, background .2s; }
+.link .nm { font-size: 40px; line-height: 1; white-space: nowrap; }
+.link .tg { font: 400 18px var(--f-pixel); letter-spacing: .08em; color: var(--gold-hi); margin-left: auto; }
+.link .ar { font: 400 28px var(--f-pixel); color: var(--gold); }
+.link:hover, .link:focus-visible { background: var(--gold-grad); color: var(--ink); }
 .link:hover .tg, .link:hover .ar, .link:focus-visible .tg, .link:focus-visible .ar { color: var(--ink); }
-.link:focus-visible { outline: 4px solid var(--cyan); outline-offset: 3px; }
-.mail { position: absolute; left: 48px; right: 48px; top: 800px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font: 500 18px var(--f-mono); color: rgba(255,255,255,.65); pointer-events: none; }
-.mail code { color: var(--text); background: rgba(255,255,255,.08); border: 2px dashed var(--yellow); padding: 8px 12px; border-radius: 10px; font-size: 22px; pointer-events: auto; user-select: all; }
-.mail button { font: 500 18px var(--f-mono); color: var(--ink); background: var(--yellow); border: 0; padding: 10px 18px; border-radius: 99px; cursor: pointer; pointer-events: auto; }
+.link:focus-visible { outline: 4px solid var(--ivory); outline-offset: 3px; }
+.mail { position: absolute; left: 56px; right: 56px; top: 800px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; pointer-events: none; }
+.mail code { font: 400 22px var(--f-pixel); color: var(--ivory); background: rgba(212,175,55,.1); border: 2px dashed var(--gold); padding: 8px 12px; border-radius: 8px; pointer-events: auto; user-select: all; }
+.mail button { font: 400 18px var(--f-dela); color: var(--ink); background: var(--gold-grad); border: 0; padding: 10px 18px; border-radius: 99px; cursor: pointer; pointer-events: auto; }
 
 .fallback { display: none; position: fixed; inset: 0; z-index: 6; overflow: auto; padding: 5rem 1.25rem; place-content: center; gap: .75rem; }
-.fallback h1 { font: 800 clamp(2.4rem, 10vw, 5rem)/.9 var(--f-display); margin: 0 0 1rem; letter-spacing: -.04em; }
+.fallback h1 { font: 400 clamp(2.2rem, 9vw, 4.5rem)/1 var(--f-dela); margin: 0 0 1rem; color: var(--gold-hi); }
 .fallback .link { height: 4.2rem; max-width: 28rem; }
+.fallback .link .nm { font-size: 1.8rem; }
 
-.cursor { position: fixed; left: 0; top: 0; z-index: 60; width: 2.2rem; height: 2.2rem; margin: -1.1rem 0 0 -1.1rem; border: 2px solid var(--yellow); border-radius: 50%; pointer-events: none; mix-blend-mode: difference; transition: width .2s, height .2s, margin .2s, background .2s; display: none; }
-.cursor.big { width: 4.5rem; height: 4.5rem; margin: -2.25rem 0 0 -2.25rem; background: var(--yellow); }
-.cursor.grab { width: 3.6rem; height: 3.6rem; margin: -1.8rem 0 0 -1.8rem; border-color: var(--pink); }
+.cursor { position: fixed; left: 0; top: 0; z-index: 60; width: 2.2rem; height: 2.2rem; margin: -1.1rem 0 0 -1.1rem; border: 2px solid var(--gold-hi); border-radius: 50%; pointer-events: none; mix-blend-mode: difference; transition: width .2s, height .2s, margin .2s, background .2s; display: none; }
+.cursor.big { width: 4.5rem; height: 4.5rem; margin: -2.25rem 0 0 -2.25rem; background: var(--gold-hi); }
+.cursor.grab { width: 3.6rem; height: 3.6rem; margin: -1.8rem 0 0 -1.8rem; border-color: var(--ivory); }
 @media (pointer: fine) { .cursor { display: block; } body, a, button, summary { cursor: none; } }
-a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--gold-hi); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition: none !important; } }
 </style>
 
 <canvas id="stage" aria-hidden="true"></canvas>
-<div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
-<div class="bgword" aria-hidden="true">Steven<br>Pierre</div>
+<div class="glow" aria-hidden="true"><i></i><i></i></div>
+<div class="bgword" aria-hidden="true">スティーブン<br>ピエール</div>
+<div class="vert" aria-hidden="true">リンクページ ・ STEVEN PIERRE</div>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 
 <div class="top">
   <span>kiss42 / linkpage</span>
-  <span class="live"><i></i>Online now</span>
+  <span class="live"><i></i>オンライン</span>
 </div>
 
 <div class="bwrap" id="bwrap">
   <div class="back" id="back">
-    <h2><span>Find me</span><span>06 places</span></h2>
+    <h2><span>リンク / Links</span><span>06</span></h2>
     <div class="links" id="links"></div>
     <div class="mail">
       <code id="addr">kisspierre42@gmail.com</code>
@@ -107,16 +113,16 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 </div>
 
 <nav class="fallback" id="fallback" aria-label="Links">
-  <h1>Steven Pierre</h1>
+  <h1>スティーブン・ピエール</h1>
 </nav>
 
 <div class="bar">
-  <p class="hint">Grab the badge and swing it. Tap it, or press <kbd>F</kbd>, to flip it over for my links.</p>
-  <button class="btn" id="flip" type="button">Flip badge</button>
+  <p class="hint">Grab the pass and swing it. Tap it, or press <kbd>F</kbd>, to flip it over for my links.</p>
+  <button class="btn" id="flip" type="button">Flip pass</button>
   <details class="edit">
-    <summary class="btn ghost">Edit badge</summary>
+    <summary class="btn ghost">Edit pass</summary>
     <div class="panel">
-      <label for="in-word">Big word<input id="in-word" maxlength="7" value="hello" autocomplete="off"></label>
+      <label for="in-word">Big word<input id="in-word" maxlength="7" value="ハロー" autocomplete="off"></label>
       <label for="in-name">Name<input id="in-name" maxlength="22" value="Steven Pierre" autocomplete="off"></label>
     </div>
   </details>
@@ -128,18 +134,18 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = window.matchMedia('(pointer: fine)').matches;
-  var COLORS = ['#ff2e93', '#ffe600', '#00e5ff', '#b6ff00', '#ff7a1a', '#fff7ff'];
+  var COLORS = ['#f6e27a', '#d4af37', '#8a6a1c', '#f4ecd8', '#ffd86b', '#fff7d6'];
 
-  /* Edit your links here. They print on the back of the badge. */
+  /* Edit your links here. Each prints on the back of the pass in its own display face. */
   var LINKS = [
-    { name: 'GitHub', tag: 'Code', href: 'https://github.com/kiss42', c: '--yellow' },
-    { name: 'LinkedIn', tag: 'Network', href: '#', c: '--cyan' },
-    { name: 'Instagram', tag: 'Photos', href: '#', c: '--pink' },
-    { name: 'X', tag: 'Updates', href: '#', c: '--lime' },
-    { name: 'YouTube', tag: 'Video', href: '#', c: '--orange' },
-    { name: 'Portfolio', tag: 'Work', href: '#', c: '--cyan' }
+    { name: 'GitHub', tag: 'コード', href: 'https://github.com/kiss42', f: 'var(--f-pixel)' },
+    { name: 'LinkedIn', tag: 'ネットワーク', href: '#', f: 'var(--f-mincho); font-weight: 800' },
+    { name: 'Instagram', tag: 'フォト', href: '#', f: 'var(--f-ramp)' },
+    { name: 'X', tag: 'つぶやき', href: '#', f: 'var(--f-dela)' },
+    { name: 'YouTube', tag: 'ビデオ', href: '#', f: 'var(--f-train)' },
+    { name: 'Portfolio', tag: '作品', href: '#', f: 'var(--f-reggae)' }
   ];
-  function linkHTML(l) { return '<a class="link" style="--c: var(' + l.c + ')" href="' + l.href + '"><span class="nm">' + l.name + '</span><span class="tg">' + l.tag + '</span><span class="ar">↗</span></a>'; }
+  function linkHTML(l) { return '<a class="link" href="' + l.href + '"><span class="nm" style="font-family: ' + l.f + '">' + l.name + '</span><span class="tg">' + l.tag + '</span><span class="ar">↗</span></a>'; }
   document.getElementById('links').innerHTML = LINKS.map(linkHTML).join('');
   document.getElementById('fallback').insertAdjacentHTML('beforeend', LINKS.map(linkHTML).join(''));
 
@@ -162,7 +168,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
     });
   }
 
-  /* Confetti */
+  /* Gold confetti */
   var fx = document.getElementById('fx'), fc = fx.getContext('2d'), bits = [], fxOn = false;
   function fxSize() { fx.width = innerWidth; fx.height = innerHeight; }
   addEventListener('resize', fxSize); fxSize();
@@ -184,7 +190,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
     if (bits.length) requestAnimationFrame(fxLoop); else { fxOn = false; fc.clearRect(0, 0, fx.width, fx.height); }
   }
 
-  /* Warp + badge interaction hooks (filled in by the 3D section) */
+  /* Warp + pass interaction hooks (filled in by the 3D section) */
   var warpHold = false, warp = 1, holdTimer;
   var hitBadge = function () { return false; }, startGrab = function () {}, endGrab = function () {}, flipBadge = function () {};
   var SKIP = 'a, button, summary, .edit, .back .mail';
@@ -218,10 +224,10 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   cam.position.z = 9;
   var HH = Math.tan(22.5 * Math.PI / 180) * 9, HW = HH;
 
-  /* Starfield streaks */
+  /* Gold dust streaks */
   var starGroup = new THREE.Group(); scene.add(starGroup);
-  var N = 1000, SP = 60, sp = new Float32Array(N * 6), sx = new Float32Array(N), sy = new Float32Array(N), sz = new Float32Array(N), col = new Float32Array(N * 6);
-  var pal = [[1, .18, .58], [1, .9, 0], [0, .9, 1], [.71, 1, 0], [1, 1, 1]];
+  var N = 900, SP = 60, sp = new Float32Array(N * 6), sx = new Float32Array(N), sy = new Float32Array(N), sz = new Float32Array(N), col = new Float32Array(N * 6);
+  var pal = [[1, .89, .48], [.83, .69, .22], [1, .96, .8], [.54, .42, .11], [1, 1, 1]];
   for (var i = 0; i < N; i++) {
     var ang = Math.random() * 6.283, rad = 3.5 + Math.random() * 22;
     sx[i] = Math.cos(ang) * rad; sy[i] = Math.sin(ang) * rad; sz[i] = -Math.random() * SP + 10;
@@ -231,19 +237,28 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   var sg = new THREE.BufferGeometry();
   sg.setAttribute('position', new THREE.BufferAttribute(sp, 3));
   sg.setAttribute('color', new THREE.BufferAttribute(col, 3));
-  starGroup.add(new THREE.LineSegments(sg, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: .6 })));
+  starGroup.add(new THREE.LineSegments(sg, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: .55 })));
 
-  /* ---------- Badge textures ---------- */
-  var TW = 640, TH = 960, FF = '"Bricolage Grotesque", "Arial Black", Arial, sans-serif', MONO = '"JetBrains Mono", Menlo, Consolas, monospace';
+  /* ---------- Pass textures ---------- */
+  var GOLD = '#d4af37', GOLD_HI = '#f6e27a', GOLD_LO = '#8a6a1c', IVORY = '#f4ecd8';
+  var TW = 640, TH = 960;
+  var F_DELA = '"Dela Gothic One", "Arial Black", Arial, sans-serif', F_PIX = '"DotGothic16", Menlo, Consolas, monospace', F_MIN = '"Shippori Mincho", "Hiragino Mincho ProN", serif', F_TRAIN = '"Train One", "Dela Gothic One", sans-serif';
   function mk(w, h) { var c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
   function rrect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
   function fit(ctx, text, maxW, maxSize, weight, fam) { var z = maxSize; do { ctx.font = weight + ' ' + z + 'px ' + fam; z -= 4; } while (ctx.measureText(text).width > maxW && z > 12); }
+  function star(ctx, x, y, r) { ctx.beginPath(); ctx.moveTo(x, y - r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.quadraticCurveTo(x, y, x, y + r); ctx.quadraticCurveTo(x, y, x - r, y); ctx.quadraticCurveTo(x, y, x, y - r); ctx.fill(); }
+  function seigaiha(ctx, alpha) {
+    ctx.save(); ctx.strokeStyle = GOLD; ctx.globalAlpha = alpha; ctx.lineWidth = 2;
+    for (var row = 0, y = 20; y < TH + 40; row++, y += 26) for (var x = (row % 2 ? 0 : -30); x < TW + 60; x += 60) for (var r = 28; r > 6; r -= 7) { ctx.beginPath(); ctx.arc(x, y, r, Math.PI, 0); ctx.stroke(); }
+    ctx.restore();
+  }
   function punch(c) {
     c.globalCompositeOperation = 'destination-out'; c.fillStyle = '#000';
     rrect(c, TW / 2 - 64, 38, 128, 28, 14); c.fill();
     c.beginPath(); c.arc(0, STUB_Y, 18, 0, 6.283); c.fill(); c.beginPath(); c.arc(TW, STUB_Y, 18, 0, 6.283); c.fill();
     c.globalCompositeOperation = 'source-over';
   }
+  function frameLine(c) { c.strokeStyle = GOLD; c.lineWidth = 3; c.globalAlpha = .75; rrect(c, 16, 16, TW - 32, TH - 32, 34); c.stroke(); c.globalAlpha = .3; c.lineWidth = 2; rrect(c, 26, 26, TW - 52, TH - 52, 26); c.stroke(); c.globalAlpha = 1; }
 
   var face = mk(TW, TH), fctx = face.getContext('2d');
   var fire = mk(160, 240), firec = fire.getContext('2d');
@@ -251,42 +266,49 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   var STUB_Y = TH * .8;
 
   function layers() {
-    var word = (document.getElementById('in-word').value || 'hello').trim() || 'hello';
+    var word = (document.getElementById('in-word').value || 'ハロー').trim() || 'ハロー';
     var name = (document.getElementById('in-name').value || 'Steven Pierre').trim() || 'Steven Pierre';
+    /* black layer with the word cut out, so molten gold shows through */
     var m = mask.getContext('2d'); m.clearRect(0, 0, TW, TH);
-    m.fillStyle = '#0a0a0e'; m.fillRect(0, 0, TW, TH);
+    m.fillStyle = '#050505'; m.fillRect(0, 0, TW, TH);
     m.globalCompositeOperation = 'destination-out'; m.fillStyle = '#000';
-    fit(m, word, TW - 90, 340, 800, FF);
+    fit(m, word, TW - 100, 330, 400, F_DELA);
     var tm = m.measureText(word), asc = tm.actualBoundingBoxAscent || 120, dsc = tm.actualBoundingBoxDescent || 0;
     m.textBaseline = 'alphabetic'; m.textAlign = 'center';
     m.fillText(word, TW / 2, 135 + (330 + asc - dsc) / 2);
     m.globalCompositeOperation = 'source-over';
+    /* printed details */
     var d = detail.getContext('2d'); d.clearRect(0, 0, TW, TH); d.textBaseline = 'alphabetic'; d.textAlign = 'left';
-    d.fillStyle = 'rgba(255,255,255,.75)'; d.font = '500 22px ' + MONO; d.fillText('ACCESS PASS', 48, 98);
-    d.textAlign = 'right'; d.fillText('OCT 2026', TW - 48, 98); d.textAlign = 'left';
-    d.fillStyle = '#fff'; fit(d, name, 360, 54, 800, FF); d.fillText(name, 48, 530);
-    d.fillStyle = '#ffe600'; rrect(d, 48, 556, 140, 34, 17); d.fill();
-    d.fillStyle = '#0a0a0e'; d.font = '500 17px ' + MONO; d.textAlign = 'center'; d.fillText('CREATOR', 118, 579); d.textAlign = 'left';
-    d.fillStyle = 'rgba(255,255,255,.7)'; d.font = '500 20px ' + MONO; d.fillText('Builder & designer', 204, 579);
-    var ex = TW - 48 - 62, ey = 538; d.strokeStyle = '#00e5ff'; d.lineWidth = 4;
-    d.beginPath(); d.arc(ex, ey, 56, 0, 6.283); d.stroke();
-    d.strokeStyle = '#ff2e93'; d.lineWidth = 3;
-    d.beginPath(); d.ellipse(ex, ey, 22, 56, 0, 0, 6.283); d.stroke();
-    d.beginPath(); d.ellipse(ex, ey, 56, 20, 0, 0, 6.283); d.stroke();
-    d.beginPath(); d.moveTo(ex - 56, ey); d.lineTo(ex + 56, ey); d.moveTo(ex, ey - 56); d.lineTo(ex, ey + 56); d.stroke();
-    var F = [['ACCESS', 'All areas', 48], ['DAYS', 'Every day', 236], ['TRACK', 'Everything', 424]];
-    F.forEach(function (f) { d.fillStyle = 'rgba(255,255,255,.55)'; d.font = '500 16px ' + MONO; d.fillText(f[0], f[2], 690); d.fillStyle = '#fff'; d.font = '800 24px ' + FF; d.fillText(f[1], f[2], 722); });
-    d.strokeStyle = 'rgba(255,255,255,.35)'; d.lineWidth = 3; d.setLineDash([12, 10]); d.beginPath(); d.moveTo(24, STUB_Y); d.lineTo(TW - 24, STUB_Y); d.stroke(); d.setLineDash([]);
+    seigaiha(d, .07); frameLine(d);
+    d.fillStyle = GOLD_HI; d.font = '400 22px ' + F_PIX; d.fillText('通行証 · ACCESS PASS', 56, 100);
+    d.textAlign = 'right'; d.fillStyle = 'rgba(244,236,216,.7)'; d.fillText('2026.10', TW - 56, 132); d.textAlign = 'left';
+    d.fillStyle = GOLD_HI; star(d, 70, 190, 16); star(d, TW - 70, 450, 12); star(d, TW - 100, 180, 7);
+    d.fillStyle = IVORY; fit(d, name, 340, 54, 800, F_MIN); d.fillText(name, 56, 520);
+    d.fillStyle = GOLD; d.font = '400 20px ' + F_PIX; d.fillText('スティーブン・ピエール', 56, 554);
+    var cg = d.createLinearGradient(56, 0, 206, 0); cg.addColorStop(0, GOLD_HI); cg.addColorStop(1, GOLD_LO);
+    d.fillStyle = cg; rrect(d, 56, 578, 156, 34, 6); d.fill();
+    d.fillStyle = '#050505'; d.font = '400 18px ' + F_PIX; d.textAlign = 'center'; d.fillText('クリエイター', 134, 602); d.textAlign = 'left';
+    d.fillStyle = 'rgba(244,236,216,.65)'; d.font = '400 20px ' + F_PIX; d.fillText('Builder & designer', 228, 602);
+    /* emblem: ring, inner ring, four-point star */
+    var ex = TW - 56 - 60, ey = 520;
+    d.strokeStyle = GOLD; d.lineWidth = 4; d.beginPath(); d.arc(ex, ey, 56, 0, 6.283); d.stroke();
+    d.lineWidth = 2; d.beginPath(); d.arc(ex, ey, 44, 0, 6.283); d.stroke();
+    d.fillStyle = GOLD_HI; star(d, ex, ey, 34);
+    d.fillStyle = GOLD; d.beginPath(); d.arc(ex, ey - 56, 5, 0, 6.283); d.arc(ex, ey + 56, 5, 0, 6.283); d.fill();
+    var F = [['入場 ACCESS', 'All areas', 56], ['期間 DAYS', 'Every day', 240], ['舞台 TRACK', 'Everything', 424]];
+    F.forEach(function (f) { d.fillStyle = 'rgba(246,226,122,.75)'; d.font = '400 16px ' + F_PIX; d.fillText(f[0], f[2], 690); d.fillStyle = IVORY; d.font = '800 24px ' + F_MIN; d.fillText(f[1], f[2], 722); });
+    d.strokeStyle = 'rgba(212,175,55,.6)'; d.lineWidth = 3; d.setLineDash([12, 10]); d.beginPath(); d.moveTo(36, STUB_Y); d.lineTo(TW - 36, STUB_Y); d.stroke(); d.setLineDash([]);
     var seed = 7; for (var q = 0; q < name.length; q++) seed = (seed * 31 + name.charCodeAt(q)) % 9973;
     function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
-    d.fillStyle = '#fff'; var bx = 48; while (bx < TW - 52) { var bw = 2 + Math.floor(rnd() * 6); d.fillRect(bx, 806, bw, 80); bx += bw + 2 + Math.floor(rnd() * 5); }
-    d.fillStyle = 'rgba(255,255,255,.7)'; d.font = '500 18px ' + MONO; d.fillText('SP-2026', 48, 920); d.textAlign = 'right'; d.fillStyle = '#ffe600'; d.fillText('FLIP FOR LINKS ↻', TW - 48, 920); d.textAlign = 'left';
-    /* back: dark card, links are HTML on top */
+    d.fillStyle = GOLD; var bx = 56; while (bx < TW - 60) { var bw = 2 + Math.floor(rnd() * 6); d.fillRect(bx, 808, bw, 78); bx += bw + 2 + Math.floor(rnd() * 5); }
+    d.fillStyle = 'rgba(244,236,216,.7)'; d.font = '400 18px ' + F_PIX; d.fillText('SP-2026', 56, 918); d.textAlign = 'right'; d.fillStyle = GOLD_HI; d.fillText('FLIP FOR LINKS ↻ 裏', TW - 56, 918); d.textAlign = 'left';
+    /* back: black, patterned, gold framed; links are HTML on top */
     var b = back.getContext('2d'); b.globalCompositeOperation = 'source-over'; b.clearRect(0, 0, TW, TH);
     b.save(); rrect(b, 0, 0, TW, TH, 46); b.clip();
-    b.fillStyle = '#0a0a0e'; b.fillRect(0, 0, TW, TH);
-    var g = b.createLinearGradient(0, 0, 0, TH); g.addColorStop(0, 'rgba(255,46,147,.18)'); g.addColorStop(.7, 'rgba(255,46,147,0)'); g.addColorStop(1, 'rgba(255,122,26,.5)'); b.fillStyle = g; b.fillRect(0, 0, TW, TH);
-    b.strokeStyle = 'rgba(255,255,255,.35)'; b.lineWidth = 3; b.setLineDash([12, 10]); b.beginPath(); b.moveTo(24, STUB_Y); b.lineTo(TW - 24, STUB_Y); b.stroke(); b.setLineDash([]);
+    b.fillStyle = '#050505'; b.fillRect(0, 0, TW, TH);
+    var g = b.createLinearGradient(0, 0, 0, TH); g.addColorStop(0, 'rgba(212,175,55,.14)'); g.addColorStop(.7, 'rgba(212,175,55,0)'); g.addColorStop(1, 'rgba(212,175,55,.42)'); b.fillStyle = g; b.fillRect(0, 0, TW, TH);
+    seigaiha(b, .09); frameLine(b);
+    b.strokeStyle = 'rgba(212,175,55,.6)'; b.lineWidth = 3; b.setLineDash([12, 10]); b.beginPath(); b.moveTo(36, STUB_Y); b.lineTo(TW - 36, STUB_Y); b.stroke(); b.setLineDash([]);
     b.restore(); punch(b);
   }
 
@@ -295,53 +317,66 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   function paint(t, tot) {
     var f = firec, W2 = 160, H2 = 240;
     f.globalCompositeOperation = 'source-over';
-    var bg = f.createLinearGradient(0, 0, 0, H2); bg.addColorStop(0, '#ff3d00'); bg.addColorStop(.5, '#ff7a00'); bg.addColorStop(1, '#ffc400'); f.fillStyle = bg; f.fillRect(0, 0, W2, H2);
+    var bg = f.createLinearGradient(0, 0, 0, H2); bg.addColorStop(0, '#9c7a1f'); bg.addColorStop(.5, '#d4af37'); bg.addColorStop(1, '#f6e27a'); f.fillStyle = bg; f.fillRect(0, 0, W2, H2);
     f.globalCompositeOperation = 'lighter';
-    for (var i = 0; i < 18; i++) {
-      var ph = (t * .09 + i / 18) % 1, y = H2 * (1.15 - ph * 1.4), x = W2 * (.5 + .55 * Math.sin(i * 2.3 + t * .55)), r = H2 * (.16 + .08 * Math.sin(i + t * .8));
+    for (var i = 0; i < 16; i++) {
+      var ph = (t * .08 + i / 16) % 1, y = H2 * (1.15 - ph * 1.4), x = W2 * (.5 + .55 * Math.sin(i * 2.3 + t * .5)), r = H2 * (.15 + .07 * Math.sin(i + t * .8));
       var gr = f.createRadialGradient(x, y, 0, x, y, r);
-      gr.addColorStop(0, 'rgba(255,250,200,.9)'); gr.addColorStop(.4, 'rgba(255,170,20,.45)'); gr.addColorStop(1, 'rgba(255,70,0,0)');
+      gr.addColorStop(0, 'rgba(255,248,215,.85)'); gr.addColorStop(.45, 'rgba(240,200,80,.35)'); gr.addColorStop(1, 'rgba(200,150,30,0)');
       f.fillStyle = gr; f.fillRect(x - r, y - r, r * 2, r * 2);
     }
     var c = fctx; c.globalCompositeOperation = 'source-over'; c.clearRect(0, 0, TW, TH);
     c.save(); rrect(c, 0, 0, TW, TH, 46); c.clip();
     c.drawImage(fire, 0, 0, TW, TH); c.drawImage(mask, 0, 0); c.drawImage(detail, 0, 0);
     var sx2 = (.5 + Math.sin(tot) * .35 + Math.sin(t * .6) * .08) * (TW * 1.6) - TW * .3;
-    var sh = c.createLinearGradient(sx2 - 160, 0, sx2 + 160, TH * .6); sh.addColorStop(0, 'rgba(255,255,255,0)'); sh.addColorStop(.5, 'rgba(255,255,255,.16)'); sh.addColorStop(1, 'rgba(255,255,255,0)');
+    var sh = c.createLinearGradient(sx2 - 160, 0, sx2 + 160, TH * .6); sh.addColorStop(0, 'rgba(255,255,255,0)'); sh.addColorStop(.5, 'rgba(255,248,220,.2)'); sh.addColorStop(1, 'rgba(255,255,255,0)');
     c.fillStyle = sh; c.fillRect(0, 0, TW, TH);
     c.restore(); punch(c);
     tex.needsUpdate = true;
   }
 
-  layers(); paint(0, 0); backTex.needsUpdate = true;
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { layers(); backTex.needsUpdate = true; });
-  ['in-word', 'in-name'].forEach(function (id) { document.getElementById(id).addEventListener('input', function () { layers(); backTex.needsUpdate = true; }); });
+  var strapC = mk(128, 512), sc2 = strapC.getContext('2d');
+  var strapTex = new THREE.CanvasTexture(strapC); strapTex.wrapS = strapTex.wrapT = THREE.RepeatWrapping;
+  function drawStrap() {
+    sc2.fillStyle = '#080808'; sc2.fillRect(0, 0, 128, 512);
+    sc2.fillStyle = GOLD; sc2.fillRect(8, 0, 4, 512); sc2.fillRect(116, 0, 4, 512);
+    sc2.save(); sc2.translate(64, 256); sc2.rotate(-Math.PI / 2); sc2.textAlign = 'center'; sc2.textBaseline = 'middle';
+    var sg2 = sc2.createLinearGradient(-250, 0, 250, 0); sg2.addColorStop(0, GOLD_HI); sg2.addColorStop(1, GOLD_LO); sc2.fillStyle = sg2;
+    sc2.font = '800 40px ' + F_MIN; sc2.fillText('STEVEN PIERRE ✦ スティーブン', 0, 4); sc2.restore();
+    strapTex.needsUpdate = true;
+  }
 
-  /* ---------- Badge + strap meshes ---------- */
+  var FONT_JOBS = [['400 40px "Dela Gothic One"', 'ハローAa'], ['400 20px "DotGothic16"', '通行証クリエイター入場期間舞台スティーブン・ピエールABC裏リンク'], ['800 40px "Shippori Mincho"', 'Steven Pierre All areas Every day Everything スティーブン'], ['400 40px "Rampart One"', 'Instagram'], ['400 40px "Train One"', 'YouTube'], ['400 40px "Reggae One"', 'Portfolio']];
+  function refresh() { layers(); drawStrap(); backTex.needsUpdate = true; }
+  refresh(); paint(0, 0);
+  if (document.fonts && document.fonts.load) Promise.all(FONT_JOBS.map(function (j) { return document.fonts.load(j[0], j[1]); })).then(refresh, refresh);
+  ['in-word', 'in-name'].forEach(function (id) {
+    document.getElementById(id).addEventListener('input', function () {
+      refresh();
+      if (document.fonts && document.fonts.load) Promise.all([document.fonts.load('400 40px "Dela Gothic One"', this.value), document.fonts.load('800 40px "Shippori Mincho"', this.value)]).then(refresh, refresh);
+    });
+  });
+
+  /* ---------- Pass + strap meshes ---------- */
   var BW = 2.4, BH = 3.6, TOPOFF = BH * .07;
   var pivot = new THREE.Group(), card = new THREE.Group(); pivot.add(card); scene.add(pivot);
   var frontM = new THREE.MeshBasicMaterial({ map: tex, alphaTest: .35 }), backM = new THREE.MeshBasicMaterial({ map: backTex, alphaTest: .35 });
   var geo = new THREE.PlaneGeometry(BW, BH);
   var front = new THREE.Mesh(geo, frontM); front.position.z = .012;
   var rear = new THREE.Mesh(geo, backM); rear.rotation.y = Math.PI; rear.position.z = -.012;
-  var edge = new THREE.Mesh(new THREE.PlaneGeometry(BW * 1.012, BH * 1.008), new THREE.MeshBasicMaterial({ color: 0x1a1a22, alphaTest: .5, side: THREE.DoubleSide }));
+  var edge = new THREE.Mesh(new THREE.PlaneGeometry(BW * 1.014, BH * 1.01), new THREE.MeshBasicMaterial({ color: 0xb8902a, alphaTest: .5, side: THREE.DoubleSide }));
   card.add(front, rear, edge);
 
-  var strapC = mk(128, 512), sc2 = strapC.getContext('2d');
-  sc2.fillStyle = '#ff2e93'; sc2.fillRect(0, 0, 128, 512);
-  sc2.fillStyle = '#ffe600'; sc2.fillRect(8, 0, 4, 512); sc2.fillRect(116, 0, 4, 512);
-  sc2.save(); sc2.translate(64, 256); sc2.rotate(-Math.PI / 2); sc2.fillStyle = '#0a0a0e'; sc2.font = '800 44px ' + FF; sc2.textAlign = 'center'; sc2.textBaseline = 'middle'; sc2.fillText('STEVEN PIERRE  •', 0, 4); sc2.restore();
-  var strapTex = new THREE.CanvasTexture(strapC); strapTex.wrapS = strapTex.wrapT = THREE.RepeatWrapping;
   var NSEG = 9, strapGeo = new THREE.BufferGeometry();
   var spos = new Float32Array((NSEG + 1) * 6), suv = new Float32Array((NSEG + 1) * 4), sidx = [];
   for (var si = 0; si < NSEG; si++) { var a0 = si * 2; sidx.push(a0, a0 + 1, a0 + 2, a0 + 1, a0 + 3, a0 + 2); }
   strapGeo.setAttribute('position', new THREE.BufferAttribute(spos, 3)); strapGeo.setAttribute('uv', new THREE.BufferAttribute(suv, 2)); strapGeo.setIndex(sidx);
   var strap = new THREE.Mesh(strapGeo, new THREE.MeshBasicMaterial({ map: strapTex, side: THREE.DoubleSide })); strap.frustumCulled = false; scene.add(strap);
-  var clipG = new THREE.Group(), clipPlate = new THREE.Mesh(new THREE.BoxGeometry(.4, .3, .06), new THREE.MeshBasicMaterial({ color: 0xcfd3da }));
-  var clipRing = new THREE.Mesh(new THREE.TorusGeometry(.1, .025, 8, 20), new THREE.MeshBasicMaterial({ color: 0x8b909a })); clipRing.position.y = .22;
+  var clipG = new THREE.Group(), clipPlate = new THREE.Mesh(new THREE.BoxGeometry(.3, .2, .06), new THREE.MeshBasicMaterial({ color: 0xf0cf62 }));
+  var clipRing = new THREE.Mesh(new THREE.TorusGeometry(.1, .025, 8, 20), new THREE.MeshBasicMaterial({ color: 0x8a6a1c })); clipRing.position.y = .17;
   clipPlate.position.z = .04; clipRing.position.z = .04; clipG.add(clipPlate, clipRing); scene.add(clipG);
 
-  /* ---------- Rope + badge physics (verlet, plane z = 0) ---------- */
+  /* ---------- Rope + pass physics (verlet, plane z = 0) ---------- */
   var S = 1, anchor = { x: 0, y: 0 }, pts = [], A, B, Ls, Hb, lastW = 0;
   function P(x, y, w) { return { x: x, y: y, px: x, py: y, w: w }; }
   var ry = 0, rx = 0, flip = 0, flipTarget = 0, grab = null, gx = 0, gy = 0, hover = false, cprev = { x: 0, y: 0 }, g0 = null;
@@ -426,12 +461,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   }
   addEventListener('resize', size); size();
 
-  var backEl = document.getElementById('back');
+  var backEl = document.getElementById('back'), bwrap = document.getElementById('bwrap');
   function placeBack(c, total) {
     var pxu = innerHeight / (2 * HH), D = 9 * pxu;
     var sxp = (c.cx / HW + 1) / 2 * innerWidth, syp = (1 - c.cy / HH) / 2 * innerHeight;
     var u = pxu * BW * S / TW, showing = Math.cos(total) < -.02;
-    document.getElementById('bwrap').style.perspective = D + 'px';
+    bwrap.style.perspective = D + 'px';
     backEl.style.visibility = showing ? 'visible' : 'hidden';
     backEl.style.transform = 'translate3d(' + (sxp - TW / 2) + 'px,' + (syp - TH / 2) + 'px,0) rotate(' + (-c.phi) + 'rad) rotateX(' + (-rx) + 'rad) rotateY(' + (total - Math.PI) + 'rad) scale(' + u + ')';
   }
@@ -456,7 +491,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
     paint(reduce ? 0 : t, total);
     placeBack(c, total);
 
-    var speed = 5 * warp * dt, len = .5 + warp * .9;
+    var speed = 4 * warp * dt, len = .5 + warp * .9;
     for (var s2 = 0; s2 < N; s2++) {
       sz[s2] += speed; if (sz[s2] > 10) sz[s2] -= SP;
       var o = s2 * 6;
