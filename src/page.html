@@ -3,7 +3,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* Layout: warp-speed 3D stage, oversized glitch name left, rainbow knot right, cards that flood with colour on hover, two counter-scrolling tickers. */
+/* Layout: one screen. A lanyard badge is the whole page; flip it and the links are printed on the back. */
 :root {
   --ink: #07050d;
   --panel: #130f20;
@@ -21,175 +21,106 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--ink); color: var(--text); font: 400 1rem/1.55 var(--f-body); overflow-x: hidden; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--ink); color: var(--text); font: 400 1rem/1.5 var(--f-body); overflow: hidden; overscroll-behavior: none; }
 #stage, #fx { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
-#stage { z-index: 1; }
+#stage { z-index: 1; touch-action: none; }
 #fx { z-index: 50; pointer-events: none; }
 .blobs { position: fixed; inset: 0; z-index: 0; overflow: hidden; pointer-events: none; }
-.blobs i { position: absolute; width: 38rem; height: 38rem; border-radius: 50%; filter: blur(90px); opacity: .35; animation: drift 14s ease-in-out infinite alternate; }
+.blobs i { position: absolute; width: 38rem; height: 38rem; border-radius: 50%; filter: blur(90px); opacity: .32; animation: drift 14s ease-in-out infinite alternate; }
 .blobs i:nth-child(1) { background: var(--pink); left: -10rem; top: -8rem; }
-.blobs i:nth-child(2) { background: var(--cyan); right: -12rem; top: 30%; animation-delay: -5s; opacity: .22; }
-.blobs i:nth-child(3) { background: var(--orange); left: 30%; bottom: -16rem; animation-delay: -9s; opacity: .22; }
+.blobs i:nth-child(2) { background: var(--cyan); right: -12rem; top: 30%; animation-delay: -5s; opacity: .2; }
+.blobs i:nth-child(3) { background: var(--orange); left: 30%; bottom: -16rem; animation-delay: -9s; opacity: .2; }
 @keyframes drift { to { transform: translate(6rem, 4rem) scale(1.2); } }
-.grain { position: fixed; inset: 0; z-index: 1; pointer-events: none; background: linear-gradient(90deg, var(--ink) 0%, transparent 55%); opacity: .8; }
-.wrap { position: relative; z-index: 2; max-width: 72rem; margin: 0 auto; padding-inline: 1.25rem; padding-block: 1.5rem 4rem; overflow-x: clip; }
+.bgword { position: fixed; inset: 0; z-index: 0; display: grid; place-items: center; text-align: center; pointer-events: none; font: 800 clamp(5rem, 22vw, 20rem)/.85 var(--f-display); letter-spacing: -.05em; color: transparent; -webkit-text-stroke: 2px color-mix(in srgb, var(--text) 10%, transparent); text-transform: uppercase; user-select: none; }
 
-.top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font: 500 .8rem var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.top, .bar { position: fixed; left: 0; right: 0; z-index: 4; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-inline: 1.25rem; font: 500 .8rem var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.top { top: 0; padding-block: 1.1rem; }
 .live { display: inline-flex; align-items: center; gap: .55rem; color: var(--lime); }
 .live i { width: .6rem; height: .6rem; border-radius: 50%; background: var(--lime); animation: ping 1.4s infinite; }
 @keyframes ping { 0% { box-shadow: 0 0 0 0 var(--lime); } 80%, 100% { box-shadow: 0 0 0 .8rem transparent; } }
 
-.hero { padding-block: clamp(2.5rem, 9vh, 5.5rem) 2rem; max-width: 46rem; }
-.hello { display: table; font: 500 .9rem var(--f-mono); background: var(--yellow); color: var(--ink); padding: .3rem .7rem; transform: rotate(-2deg); margin: 0 0 1.25rem; letter-spacing: .06em; text-transform: uppercase; }
-h1 { position: relative; display: block; width: fit-content; font: 800 clamp(3.6rem, 14vw, 9.5rem)/.86 var(--f-display); letter-spacing: -.045em; margin: 0; cursor: default;
-  background: linear-gradient(95deg, var(--text) 10%, var(--yellow) 35%, var(--pink) 60%, var(--cyan) 85%); background-size: 220% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
-  animation: sheen 5s linear infinite alternate; }
-h1 .l { display: block; }
-h1::before, h1::after { content: attr(data-text); position: absolute; inset: 0; white-space: pre-line; opacity: 0; background: none; -webkit-background-clip: border-box; background-clip: border-box; pointer-events: none; }
-h1::before { color: var(--cyan); }
-h1::after { color: var(--pink); }
-h1:hover::before { opacity: .9; animation: glitchA .35s steps(2) infinite; }
-h1:hover::after { opacity: .9; animation: glitchB .35s steps(2) infinite; }
-@keyframes sheen { to { background-position: 100% 0; } }
-@keyframes glitchA { 0% { transform: translate(-6px, 2px); clip-path: inset(10% 0 55% 0); } 50% { transform: translate(5px, -3px); clip-path: inset(60% 0 8% 0); } 100% { transform: translate(-3px, 1px); clip-path: inset(30% 0 35% 0); } }
-@keyframes glitchB { 0% { transform: translate(6px, -2px); clip-path: inset(55% 0 10% 0); } 50% { transform: translate(-5px, 3px); clip-path: inset(8% 0 62% 0); } 100% { transform: translate(3px, -1px); clip-path: inset(38% 0 28% 0); } }
-.role { margin: 1.5rem 0 0; font: 500 clamp(1.15rem, 3.2vw, 1.7rem) var(--f-mono); min-height: 2em; color: var(--cyan); }
-.caret { display: inline-block; width: .6ch; height: 1.1em; background: var(--pink); vertical-align: -.15em; margin-left: 2px; animation: blink 1s steps(1) infinite; }
-@keyframes blink { 50% { opacity: 0; } }
-.bio { color: var(--muted); max-width: 32rem; margin: .5rem 0 0; font-size: 1.15rem; }
-.cta { display: flex; flex-wrap: wrap; gap: .9rem; margin-top: 2rem; }
-.btn { display: inline-block; font: 800 1.05rem var(--f-display); letter-spacing: -.01em; padding: 1rem 1.7rem; border-radius: 99px; text-decoration: none; border: 2px solid var(--pink); color: var(--ink); background: var(--pink); box-shadow: 0 0 0 0 var(--yellow); transition: box-shadow .2s, background .2s, color .2s; will-change: transform; cursor: pointer; font-family: var(--f-display); }
+.bar { bottom: 0; padding-block: 1rem; flex-wrap: wrap; justify-content: center; background: linear-gradient(0deg, var(--ink) 30%, transparent); pointer-events: none; }
+.bar > * { pointer-events: auto; }
+.hint { margin: 0; text-transform: none; letter-spacing: 0; font-size: .8rem; text-align: center; flex-basis: 100%; }
+kbd { font: 500 .75rem var(--f-mono); border: 1px solid var(--muted); border-bottom-width: 3px; border-radius: .3rem; padding: .05rem .4rem; color: var(--text); }
+.btn { font: 800 1rem var(--f-display); letter-spacing: -.01em; text-transform: none; padding: .8rem 1.5rem; border-radius: 99px; border: 2px solid var(--pink); color: var(--ink); background: var(--pink); cursor: pointer; transition: box-shadow .2s; }
 .btn:hover, .btn:focus-visible { box-shadow: 0 0 0 6px color-mix(in srgb, var(--yellow) 55%, transparent), 0 0 40px var(--pink); }
 .btn.ghost { background: transparent; color: var(--text); border-color: var(--cyan); }
-.btn.ghost:hover { background: var(--cyan); color: var(--ink); }
-.hint { margin: 1.25rem 0 0; font: 400 .8rem var(--f-mono); color: var(--muted); }
-kbd { font: 500 .75rem var(--f-mono); border: 1px solid var(--muted); border-bottom-width: 3px; border-radius: .3rem; padding: .05rem .4rem; color: var(--text); }
+.edit { position: relative; }
+.edit summary { list-style: none; }
+.edit summary::-webkit-details-marker { display: none; }
+.edit .panel { position: absolute; bottom: calc(100% + .7rem); left: 50%; transform: translateX(-50%); display: grid; gap: .6rem; width: min(86vw, 19rem); padding: .9rem; background: var(--panel); border: 2px solid var(--line); border-radius: .8rem; text-transform: none; letter-spacing: 0; }
+.edit label { display: grid; gap: .25rem; font: 500 .7rem var(--f-mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.edit input { font: 500 1rem var(--f-body); color: var(--text); background: var(--ink); border: 2px solid var(--line); border-radius: .5rem; padding: .5rem .65rem; width: 100%; }
+.edit input:focus-visible { outline: 3px solid var(--cyan); outline-offset: 1px; border-color: var(--cyan); }
 
-h2 { font: 800 clamp(2rem, 6vw, 3.4rem)/1 var(--f-display); letter-spacing: -.035em; margin: 4rem 0 1.5rem; display: flex; align-items: baseline; flex-wrap: wrap; gap: .5rem 1rem; }
-h2 small { font: 500 .85rem var(--f-mono); color: var(--yellow); letter-spacing: .06em; }
+/* The back of the badge: real links, laid over the 3D card and moved with it each frame. */
+.bwrap { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
+.back { position: absolute; left: 0; top: 0; width: 640px; height: 960px; visibility: hidden; pointer-events: none; will-change: transform; color: var(--text); }
+.back h2 { position: absolute; left: 48px; right: 48px; top: 70px; margin: 0; display: flex; justify-content: space-between; font: 500 22px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; color: var(--yellow); }
+.back h2 span:last-child { color: rgba(255,255,255,.6); }
+.links { position: absolute; left: 48px; right: 48px; top: 125px; display: grid; gap: 12px; }
+.link { --c: var(--pink); position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 84px; padding: 0 28px; overflow: hidden; border: 3px solid var(--c); border-radius: 42px; color: var(--text); text-decoration: none; pointer-events: auto; background: rgba(10,10,14,.75); transition: color .2s, background .2s; }
+.link .nm { font: 800 38px/1 var(--f-display); letter-spacing: -.02em; }
+.link .tg { font: 500 17px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--c); margin-left: auto; margin-right: 10px; }
+.link .ar { font: 500 30px var(--f-mono); color: var(--c); }
+.link:hover, .link:focus-visible { background: var(--c); color: var(--ink); }
+.link:hover .tg, .link:hover .ar, .link:focus-visible .tg, .link:focus-visible .ar { color: var(--ink); }
+.link:focus-visible { outline: 4px solid var(--cyan); outline-offset: 3px; }
+.mail { position: absolute; left: 48px; right: 48px; top: 800px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font: 500 18px var(--f-mono); color: rgba(255,255,255,.65); pointer-events: none; }
+.mail code { color: var(--text); background: rgba(255,255,255,.08); border: 2px dashed var(--yellow); padding: 8px 12px; border-radius: 10px; font-size: 22px; pointer-events: auto; user-select: all; }
+.mail button { font: 500 18px var(--f-mono); color: var(--ink); background: var(--yellow); border: 0; padding: 10px 18px; border-radius: 99px; cursor: pointer; pointer-events: auto; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); gap: 1rem; perspective: 1000px; }
-.card { --c: var(--pink); position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 3rem; min-height: 11rem; padding: 1.3rem; overflow: hidden;
-  background: var(--panel); border: 2px solid var(--line); border-radius: 1.1rem; color: var(--text); text-decoration: none;
-  transform-style: preserve-3d; transition: transform .2s ease-out, border-color .2s, color .25s; will-change: transform; min-width: 0; }
-.card::before { content: ""; position: absolute; left: 50%; top: 100%; width: 150%; aspect-ratio: 1; border-radius: 50%; background: var(--c); transform: translate(-50%, 0) scale(.2); transition: transform .45s cubic-bezier(.2,.8,.2,1); z-index: 0; }
-.card > * { position: relative; z-index: 1; }
-.card:hover, .card:focus-visible { border-color: var(--c); color: var(--ink); }
-.card:hover::before, .card:focus-visible::before { transform: translate(-50%, -60%) scale(1); }
-.card .tag { font: 500 .75rem var(--f-mono); letter-spacing: .1em; text-transform: uppercase; display: flex; justify-content: space-between; color: var(--c); transition: color .25s; transform: translateZ(20px); }
-.card:hover .tag { color: var(--ink); }
-.card .name { font: 800 1.9rem/1 var(--f-display); letter-spacing: -.03em; display: flex; justify-content: space-between; align-items: flex-end; gap: .5rem; transform: translateZ(45px); overflow-wrap: anywhere; }
-.card .arrow { font-family: var(--f-mono); font-size: 1.5rem; transition: transform .25s; }
-.card:hover .arrow { transform: translate(6px, -6px) rotate(8deg); }
-.in { opacity: 0; transform: translateY(24px) scale(.97); animation: rise .7s cubic-bezier(.2,.8,.2,1) forwards; animation-delay: calc(var(--i, 0) * 70ms + .15s); }
-@keyframes rise { to { opacity: 1; transform: none; } }
-
-.mail { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: 1.25rem; font: 500 .95rem var(--f-mono); color: var(--muted); }
-.mail code { color: var(--text); background: var(--panel); border: 2px dashed var(--yellow); padding: .45rem .8rem; border-radius: .5rem; overflow-wrap: anywhere; }
-.mail button { font: 500 .85rem var(--f-mono); color: var(--ink); background: var(--yellow); border: 0; padding: .55rem .95rem; border-radius: 99px; cursor: pointer; }
-
-.bands { margin: 4.5rem -1.25rem 0; overflow: hidden; transform: rotate(-2.2deg); }
-.band { overflow: hidden; white-space: nowrap; padding-block: .8rem; background: var(--yellow); color: var(--ink); }
-.band.b2 { background: var(--pink); color: var(--text); transform: translateY(-.2rem); }
-.track { display: inline-flex; gap: 2rem; font: 800 clamp(1.6rem, 4vw, 2.4rem) var(--f-display); letter-spacing: -.03em; text-transform: uppercase; animation: slide 26s linear infinite; }
-.b2 .track { animation-direction: reverse; animation-duration: 32s; }
-@keyframes slide { to { transform: translateX(-50%); } }
-
-.now { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); gap: 1rem; margin: 0; }
-.now div { border: 2px solid var(--line); border-radius: 1rem; padding: 1.1rem; min-width: 0; background: var(--panel); }
-.now dt { font: 500 .75rem var(--f-mono); color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
-.now dd { margin: .5rem 0 0; font: 800 1.5rem/1.1 var(--f-display); letter-spacing: -.02em; }
-.now div:nth-child(1) dd { color: var(--lime); }
-.now div:nth-child(2) dd { color: var(--cyan); }
-.now div:nth-child(3) dd { color: var(--yellow); font-variant-numeric: tabular-nums; }
-.now div:nth-child(4) dd { color: var(--pink); }
-footer { margin-top: 3.5rem; color: var(--muted); font: 400 .85rem var(--f-mono); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+.fallback { display: none; position: fixed; inset: 0; z-index: 6; overflow: auto; padding: 5rem 1.25rem; place-content: center; gap: .75rem; }
+.fallback h1 { font: 800 clamp(2.4rem, 10vw, 5rem)/.9 var(--f-display); margin: 0 0 1rem; letter-spacing: -.04em; }
+.fallback .link { height: 4.2rem; max-width: 28rem; }
 
 .cursor { position: fixed; left: 0; top: 0; z-index: 60; width: 2.2rem; height: 2.2rem; margin: -1.1rem 0 0 -1.1rem; border: 2px solid var(--yellow); border-radius: 50%; pointer-events: none; mix-blend-mode: difference; transition: width .2s, height .2s, margin .2s, background .2s; display: none; }
 .cursor.big { width: 4.5rem; height: 4.5rem; margin: -2.25rem 0 0 -2.25rem; background: var(--yellow); }
-@media (pointer: fine) { .cursor { display: block; } body, a, button { cursor: none; } }
-
-
-.cfg { display: flex; flex-wrap: wrap; gap: .6rem; align-items: end; margin-top: 1.5rem; padding: .9rem; border: 2px dashed var(--line); border-radius: .8rem; max-width: 32rem; }
-.cfg legend { font: 500 .75rem var(--f-mono); color: var(--yellow); letter-spacing: .1em; text-transform: uppercase; padding-inline: .4rem; }
-.cfg label { display: grid; gap: .25rem; font: 500 .7rem var(--f-mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; flex: 1 1 8rem; min-width: 0; }
-.cfg input { font: 500 1rem var(--f-body); color: var(--text); background: var(--ink); border: 2px solid var(--line); border-radius: .5rem; padding: .5rem .65rem; width: 100%; min-width: 0; }
-.cfg input:focus-visible { outline: 3px solid var(--cyan); outline-offset: 1px; border-color: var(--cyan); }
-.cfg button { font: 500 .85rem var(--f-mono); color: var(--ink); background: var(--cyan); border: 0; border-radius: 99px; padding: .65rem 1rem; cursor: pointer; }
 .cursor.grab { width: 3.6rem; height: 3.6rem; margin: -1.8rem 0 0 -1.8rem; border-color: var(--pink); }
-
-a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
-@media (max-width: 800px) { .grain { background: linear-gradient(180deg, transparent 0%, var(--ink) 75%); opacity: .55; } .hero { padding-top: 56vh; } }
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
-  .in { opacity: 1; transform: none; }
-}
+@media (pointer: fine) { .cursor { display: block; } body, a, button, summary { cursor: none; } }
+a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--cyan); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition: none !important; } }
 </style>
 
 <canvas id="stage" aria-hidden="true"></canvas>
 <div class="blobs" aria-hidden="true"><i></i><i></i><i></i></div>
-<div class="grain" aria-hidden="true"></div>
+<div class="bgword" aria-hidden="true">Steven<br>Pierre</div>
 <canvas id="fx" aria-hidden="true"></canvas>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 
-<div class="wrap">
-  <div class="top">
-    <span>kiss42 / linkpage</span>
-    <span class="live"><i></i>Online now</span>
-  </div>
+<div class="top">
+  <span>kiss42 / linkpage</span>
+  <span class="live"><i></i>Online now</span>
+</div>
 
-  <header class="hero">
-    <p class="hello in" style="--i:0" id="hello">Hey, welcome</p>
-    <h1 id="name" class="in" style="--i:1" data-text="Steven&#10;Pierre"><span class="l">Steven</span><span class="l">Pierre</span></h1>
-    <p class="role in" style="--i:2"><span id="typed"></span><span class="caret"></span></p>
-    <p class="bio in" style="--i:3">Everything I'm building and everywhere you can find me, in one place.</p>
-    <div class="cta in" style="--i:4">
-      <a class="btn mag" href="#links">See my links</a>
-      <a class="btn ghost mag" href="https://github.com/kiss42">GitHub profile</a>
-    </div>
-    <p class="hint in" style="--i:5">Grab the badge and swing it. Tap anywhere else for confetti. Hold <kbd>Space</kbd> for warp speed.</p>
-    <fieldset class="cfg in" style="--i:6">
-      <legend>Make it yours</legend>
-      <label for="in-word">Big word<input id="in-word" maxlength="7" value="hello" autocomplete="off"></label>
-      <label for="in-name">Name<input id="in-name" maxlength="22" value="Steven Pierre" autocomplete="off"></label>
-      <button type="button" id="reset">Reset badge</button>
-    </fieldset>
-  </header>
-
-  <section id="links">
-    <h2>Find me <small>/ 06 places</small></h2>
-    <div class="grid">
-      <a class="card in" style="--i:7; --c: var(--yellow)" href="https://github.com/kiss42"><span class="tag"><span>Code</span><span>01</span></span><span class="name">GitHub <span class="arrow">↗</span></span></a>
-      <a class="card in" style="--i:8; --c: var(--cyan)" href="#"><span class="tag"><span>Network</span><span>02</span></span><span class="name">LinkedIn <span class="arrow">↗</span></span></a>
-      <a class="card in" style="--i:8; --c: var(--pink)" href="#"><span class="tag"><span>Photos</span><span>03</span></span><span class="name">Instagram <span class="arrow">↗</span></span></a>
-      <a class="card in" style="--i:9; --c: var(--lime)" href="#"><span class="tag"><span>Updates</span><span>04</span></span><span class="name">X <span class="arrow">↗</span></span></a>
-      <a class="card in" style="--i:10; --c: var(--orange)" href="#"><span class="tag"><span>Video</span><span>05</span></span><span class="name">YouTube <span class="arrow">↗</span></span></a>
-      <a class="card in" style="--i:11; --c: var(--cyan)" href="#"><span class="tag"><span>Work</span><span>06</span></span><span class="name">Portfolio <span class="arrow">↗</span></span></a>
-    </div>
+<div class="bwrap" id="bwrap">
+  <div class="back" id="back">
+    <h2><span>Find me</span><span>06 places</span></h2>
+    <div class="links" id="links"></div>
     <div class="mail">
-      <span>Email</span>
       <code id="addr">kisspierre42@gmail.com</code>
       <button id="copy" type="button">Copy</button>
     </div>
-  </section>
-
-  <div class="bands" aria-hidden="true">
-    <div class="band"><div class="track" id="t1"></div></div>
-    <div class="band b2"><div class="track" id="t2"></div></div>
   </div>
+</div>
 
-  <section>
-    <h2>Right now <small>/ live</small></h2>
-    <dl class="now">
-      <div><dt>Status</dt><dd>Open to new projects</dd></div>
-      <div><dt>Building</dt><dd>This link page</dd></div>
-      <div><dt>Local time</dt><dd id="clock">--:--:--</dd></div>
-      <div><dt>Last updated</dt><dd>October 2026</dd></div>
-    </dl>
-  </section>
+<nav class="fallback" id="fallback" aria-label="Links">
+  <h1>Steven Pierre</h1>
+</nav>
 
-  <footer><span>© 2026 Steven Pierre</span><span>Drag the knot. Hover the name.</span></footer>
+<div class="bar">
+  <p class="hint">Grab the badge and swing it. Tap it, or press <kbd>F</kbd>, to flip it over for my links.</p>
+  <button class="btn" id="flip" type="button">Flip badge</button>
+  <details class="edit">
+    <summary class="btn ghost">Edit badge</summary>
+    <div class="panel">
+      <label for="in-word">Big word<input id="in-word" maxlength="7" value="hello" autocomplete="off"></label>
+      <label for="in-name">Name<input id="in-name" maxlength="22" value="Steven Pierre" autocomplete="off"></label>
+    </div>
+  </details>
+  <button class="btn ghost" id="reset" type="button">Reset</button>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -199,64 +130,35 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
   var fine = window.matchMedia('(pointer: fine)').matches;
   var COLORS = ['#ff2e93', '#ffe600', '#00e5ff', '#b6ff00', '#ff7a1a', '#fff7ff'];
 
-  /* Greeting by local time */
-  var h = new Date().getHours();
-  document.getElementById('hello').textContent = (h < 5 ? 'Up late?' : h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', welcome';
-
-  /* Tickers */
-  function fill(id, words) { var s = ''; for (var r = 0; r < 6; r++) words.forEach(function (w) { s += '<span>' + w + ' ✦</span>'; }); document.getElementById(id).innerHTML = s; }
-  fill('t1', ['Steven Pierre', 'Builder', 'Creator', 'Open to work']);
-  fill('t2', ['Say hello', 'Let\'s make something', 'Scroll less', 'Click more']);
-
-  /* Typed roles */
-  var roles = ['Builder of things.', 'Designer of experiments.', 'Always shipping.', 'Say hello below.'];
-  var el = document.getElementById('typed'), ri = 0, ci = 0, del = false;
-  function type() {
-    var s = roles[ri];
-    el.textContent = s.slice(0, ci);
-    if (!del && ci === s.length) { del = true; return setTimeout(type, 1500); }
-    if (del && ci === 0) { del = false; ri = (ri + 1) % roles.length; }
-    ci += del ? -1 : 1;
-    setTimeout(type, del ? 25 : 65);
-  }
-  if (reduce) el.textContent = roles[0]; else type();
-
-  /* Clock */
-  var clock = document.getElementById('clock');
-  function tick() { clock.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }); }
-  tick(); setInterval(tick, 1000);
+  /* Edit your links here. They print on the back of the badge. */
+  var LINKS = [
+    { name: 'GitHub', tag: 'Code', href: 'https://github.com/kiss42', c: '--yellow' },
+    { name: 'LinkedIn', tag: 'Network', href: '#', c: '--cyan' },
+    { name: 'Instagram', tag: 'Photos', href: '#', c: '--pink' },
+    { name: 'X', tag: 'Updates', href: '#', c: '--lime' },
+    { name: 'YouTube', tag: 'Video', href: '#', c: '--orange' },
+    { name: 'Portfolio', tag: 'Work', href: '#', c: '--cyan' }
+  ];
+  function linkHTML(l) { return '<a class="link" style="--c: var(' + l.c + ')" href="' + l.href + '"><span class="nm">' + l.name + '</span><span class="tg">' + l.tag + '</span><span class="ar">↗</span></a>'; }
+  document.getElementById('links').innerHTML = LINKS.map(linkHTML).join('');
+  document.getElementById('fallback').insertAdjacentHTML('beforeend', LINKS.map(linkHTML).join(''));
 
   /* Copy email */
   var btn = document.getElementById('copy'), addr = document.getElementById('addr');
-  btn.addEventListener('click', function (e) {
-    e.stopPropagation();
+  btn.addEventListener('click', function () {
     var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); };
     var fallback = function () { var r = document.createRange(); r.selectNodeContents(addr); var s = getSelection(); s.removeAllRanges(); s.addRange(r); };
     if (navigator.clipboard) navigator.clipboard.writeText(addr.textContent).then(done, fallback); else fallback();
   });
 
-  /* Card tilt + magnetic buttons + cursor */
+  /* Cursor */
   var cur = document.getElementById('cursor'), cx = 0, cy = 0, px = 0, py = 0;
   if (fine && !reduce) {
     addEventListener('pointermove', function (e) { cx = e.clientX; cy = e.clientY; });
     (function follow() { px += (cx - px) * .22; py += (cy - py) * .22; cur.style.transform = 'translate(' + px + 'px,' + py + 'px)'; requestAnimationFrame(follow); })();
-    document.querySelectorAll('a, button').forEach(function (n) {
+    document.querySelectorAll('a, button, summary').forEach(function (n) {
       n.addEventListener('pointerenter', function () { cur.classList.add('big'); });
       n.addEventListener('pointerleave', function () { cur.classList.remove('big'); });
-    });
-    document.querySelectorAll('.card').forEach(function (c) {
-      c.addEventListener('pointermove', function (e) {
-        var b = c.getBoundingClientRect(), x = (e.clientX - b.left) / b.width, y = (e.clientY - b.top) / b.height;
-        c.style.transform = 'rotateY(' + ((x - .5) * 18) + 'deg) rotateX(' + ((.5 - y) * 18) + 'deg) translateZ(10px)';
-      });
-      c.addEventListener('pointerleave', function () { c.style.transform = ''; });
-    });
-    document.querySelectorAll('.mag').forEach(function (m) {
-      m.addEventListener('pointermove', function (e) {
-        var b = m.getBoundingClientRect();
-        m.style.transform = 'translate(' + ((e.clientX - b.left - b.width / 2) * .25) + 'px,' + ((e.clientY - b.top - b.height / 2) * .35) + 'px)';
-      });
-      m.addEventListener('pointerleave', function () { m.style.transform = ''; });
     });
   }
 
@@ -282,13 +184,18 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
     if (bits.length) requestAnimationFrame(fxLoop); else { fxOn = false; fc.clearRect(0, 0, fx.width, fx.height); }
   }
 
-  /* Warp control (shared with the 3D stage) */
+  /* Warp + badge interaction hooks (filled in by the 3D section) */
   var warpHold = false, warp = 1, holdTimer;
-  addEventListener('keydown', function (e) { if (e.code === 'Space' && !/^(BUTTON|A|INPUT|TEXTAREA)$/.test(e.target.tagName)) { e.preventDefault(); warpHold = true; } });
+  var hitBadge = function () { return false; }, startGrab = function () {}, endGrab = function () {}, flipBadge = function () {};
+  var SKIP = 'a, button, summary, .edit, .back .mail';
+  addEventListener('keydown', function (e) {
+    if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+    if (e.code === 'Space' && !/^(BUTTON|A|SUMMARY)$/.test(e.target.tagName)) { e.preventDefault(); warpHold = true; }
+    if (e.code === 'KeyF') flipBadge();
+  });
   addEventListener('keyup', function (e) { if (e.code === 'Space') warpHold = false; });
-  var hitBadge = function () { return false; }, startGrab = function () {};
   addEventListener('pointerdown', function (e) {
-    if (e.target.closest('a, button, .card, .mail, .cfg')) return;
+    if (e.target.closest(SKIP)) return;
     if (hitBadge(e.clientX, e.clientY)) { startGrab(e.clientX, e.clientY); return; }
     burst(e.clientX, e.clientY);
     warp = Math.max(warp, 9);
@@ -296,16 +203,16 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
   });
   addEventListener('touchstart', function (e) {
     var t = e.touches[0];
-    if (t && !e.target.closest('a, button, .card, .mail, .cfg') && hitBadge(t.clientX, t.clientY)) e.preventDefault();
+    if (t && !e.target.closest(SKIP) && hitBadge(t.clientX, t.clientY)) e.preventDefault();
   }, { passive: false });
-  addEventListener('pointerup', function () { clearTimeout(holdTimer); warpHold = false; });
-  addEventListener('pointercancel', function () { clearTimeout(holdTimer); warpHold = false; });
+  addEventListener('pointerup', function (e) { clearTimeout(holdTimer); warpHold = false; endGrab(e.clientX, e.clientY); });
+  addEventListener('pointercancel', function () { clearTimeout(holdTimer); warpHold = false; endGrab(null); });
 
-  /* 3D stage: starfield + lanyard badge on a verlet rope */
+  /* ---------- 3D stage ---------- */
   var canvas = document.getElementById('stage');
-  if (!window.THREE) return;
-  var renderer;
-  try { renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true }); } catch (e) { return; }
+  var renderer, ok = !!window.THREE;
+  if (ok) { try { renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true }); } catch (e) { ok = false; } }
+  if (!ok) { document.getElementById('fallback').style.display = 'grid'; document.querySelector('.bar').style.display = 'none'; return; }
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   var scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(45, 1, .1, 200);
   cam.position.z = 9;
@@ -313,24 +220,30 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
 
   /* Starfield streaks */
   var starGroup = new THREE.Group(); scene.add(starGroup);
-  var N = 1100, SP = 60, sp = new Float32Array(N * 6), sx = new Float32Array(N), sy = new Float32Array(N), sz = new Float32Array(N), col = new Float32Array(N * 6);
+  var N = 1000, SP = 60, sp = new Float32Array(N * 6), sx = new Float32Array(N), sy = new Float32Array(N), sz = new Float32Array(N), col = new Float32Array(N * 6);
   var pal = [[1, .18, .58], [1, .9, 0], [0, .9, 1], [.71, 1, 0], [1, 1, 1]];
   for (var i = 0; i < N; i++) {
-    var ang = Math.random() * 6.283, rr = 3.5 + Math.random() * 22;
-    sx[i] = Math.cos(ang) * rr; sy[i] = Math.sin(ang) * rr; sz[i] = -Math.random() * SP + 10;
+    var ang = Math.random() * 6.283, rad = 3.5 + Math.random() * 22;
+    sx[i] = Math.cos(ang) * rad; sy[i] = Math.sin(ang) * rad; sz[i] = -Math.random() * SP + 10;
     var c = pal[i % pal.length];
     for (var k = 0; k < 2; k++) { col[i * 6 + k * 3] = c[0]; col[i * 6 + k * 3 + 1] = c[1]; col[i * 6 + k * 3 + 2] = c[2]; }
   }
   var sg = new THREE.BufferGeometry();
   sg.setAttribute('position', new THREE.BufferAttribute(sp, 3));
   sg.setAttribute('color', new THREE.BufferAttribute(col, 3));
-  starGroup.add(new THREE.LineSegments(sg, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: .7 })));
+  starGroup.add(new THREE.LineSegments(sg, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: .6 })));
 
   /* ---------- Badge textures ---------- */
   var TW = 640, TH = 960, FF = '"Bricolage Grotesque", "Arial Black", Arial, sans-serif', MONO = '"JetBrains Mono", Menlo, Consolas, monospace';
   function mk(w, h) { var c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
   function rrect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
-  function fit(ctx, text, maxW, maxSize, weight, fam) { var sz2 = maxSize; do { ctx.font = weight + ' ' + sz2 + 'px ' + fam; sz2 -= 4; } while (ctx.measureText(text).width > maxW && sz2 > 12); }
+  function fit(ctx, text, maxW, maxSize, weight, fam) { var z = maxSize; do { ctx.font = weight + ' ' + z + 'px ' + fam; z -= 4; } while (ctx.measureText(text).width > maxW && z > 12); }
+  function punch(c) {
+    c.globalCompositeOperation = 'destination-out'; c.fillStyle = '#000';
+    rrect(c, TW / 2 - 64, 38, 128, 28, 14); c.fill();
+    c.beginPath(); c.arc(0, STUB_Y, 18, 0, 6.283); c.fill(); c.beginPath(); c.arc(TW, STUB_Y, 18, 0, 6.283); c.fill();
+    c.globalCompositeOperation = 'source-over';
+  }
 
   var face = mk(TW, TH), fctx = face.getContext('2d');
   var fire = mk(160, 240), firec = fire.getContext('2d');
@@ -340,7 +253,6 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
   function layers() {
     var word = (document.getElementById('in-word').value || 'hello').trim() || 'hello';
     var name = (document.getElementById('in-name').value || 'Steven Pierre').trim() || 'Steven Pierre';
-    /* black layer with the word cut out, so the fire shows through */
     var m = mask.getContext('2d'); m.clearRect(0, 0, TW, TH);
     m.fillStyle = '#0a0a0e'; m.fillRect(0, 0, TW, TH);
     m.globalCompositeOperation = 'destination-out'; m.fillStyle = '#000';
@@ -349,7 +261,6 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
     m.textBaseline = 'alphabetic'; m.textAlign = 'center';
     m.fillText(word, TW / 2, 135 + (330 + asc - dsc) / 2);
     m.globalCompositeOperation = 'source-over';
-    /* printed details */
     var d = detail.getContext('2d'); d.clearRect(0, 0, TW, TH); d.textBaseline = 'alphabetic'; d.textAlign = 'left';
     d.fillStyle = 'rgba(255,255,255,.75)'; d.font = '500 22px ' + MONO; d.fillText('ACCESS PASS', 48, 98);
     d.textAlign = 'right'; d.fillText('OCT 2026', TW - 48, 98); d.textAlign = 'left';
@@ -357,35 +268,31 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
     d.fillStyle = '#ffe600'; rrect(d, 48, 556, 140, 34, 17); d.fill();
     d.fillStyle = '#0a0a0e'; d.font = '500 17px ' + MONO; d.textAlign = 'center'; d.fillText('CREATOR', 118, 579); d.textAlign = 'left';
     d.fillStyle = 'rgba(255,255,255,.7)'; d.font = '500 20px ' + MONO; d.fillText('Builder & designer', 204, 579);
-    /* emblem */
     var ex = TW - 48 - 62, ey = 538; d.strokeStyle = '#00e5ff'; d.lineWidth = 4;
     d.beginPath(); d.arc(ex, ey, 56, 0, 6.283); d.stroke();
     d.strokeStyle = '#ff2e93'; d.lineWidth = 3;
     d.beginPath(); d.ellipse(ex, ey, 22, 56, 0, 0, 6.283); d.stroke();
     d.beginPath(); d.ellipse(ex, ey, 56, 20, 0, 0, 6.283); d.stroke();
     d.beginPath(); d.moveTo(ex - 56, ey); d.lineTo(ex + 56, ey); d.moveTo(ex, ey - 56); d.lineTo(ex, ey + 56); d.stroke();
-    /* fields */
     var F = [['ACCESS', 'All areas', 48], ['DAYS', 'Every day', 236], ['TRACK', 'Everything', 424]];
     F.forEach(function (f) { d.fillStyle = 'rgba(255,255,255,.55)'; d.font = '500 16px ' + MONO; d.fillText(f[0], f[2], 690); d.fillStyle = '#fff'; d.font = '800 24px ' + FF; d.fillText(f[1], f[2], 722); });
-    /* perforation */
     d.strokeStyle = 'rgba(255,255,255,.35)'; d.lineWidth = 3; d.setLineDash([12, 10]); d.beginPath(); d.moveTo(24, STUB_Y); d.lineTo(TW - 24, STUB_Y); d.stroke(); d.setLineDash([]);
-    /* barcode */
     var seed = 7; for (var q = 0; q < name.length; q++) seed = (seed * 31 + name.charCodeAt(q)) % 9973;
     function rnd() { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; }
     d.fillStyle = '#fff'; var bx = 48; while (bx < TW - 52) { var bw = 2 + Math.floor(rnd() * 6); d.fillRect(bx, 806, bw, 80); bx += bw + 2 + Math.floor(rnd() * 5); }
-    d.fillStyle = 'rgba(255,255,255,.7)'; d.font = '500 18px ' + MONO; d.fillText('SP-2026', 48, 920); d.textAlign = 'right'; d.fillText('ADMIT ONE', TW - 48, 920); d.textAlign = 'left';
-    /* back */
-    var b = back.getContext('2d'); b.fillStyle = '#0a0a0e'; b.fillRect(0, 0, TW, TH);
-    var g = b.createLinearGradient(0, 0, 0, TH); g.addColorStop(0, 'rgba(255,46,147,.0)'); g.addColorStop(1, 'rgba(255,122,26,.55)'); b.fillStyle = g; b.fillRect(0, 0, TW, TH);
-    b.textAlign = 'center'; b.fillStyle = '#fff'; fit(b, name, TW - 100, 64, 800, FF); b.fillText(name, TW / 2, 430);
-    b.fillStyle = '#ffe600'; b.font = '500 26px ' + MONO; b.fillText('KISS42 / LINKPAGE', TW / 2, 486);
-    b.fillStyle = 'rgba(255,255,255,.6)'; b.font = '500 20px ' + MONO; b.fillText('Flip me again. Go on.', TW / 2, 880);
+    d.fillStyle = 'rgba(255,255,255,.7)'; d.font = '500 18px ' + MONO; d.fillText('SP-2026', 48, 920); d.textAlign = 'right'; d.fillStyle = '#ffe600'; d.fillText('FLIP FOR LINKS ↻', TW - 48, 920); d.textAlign = 'left';
+    /* back: dark card, links are HTML on top */
+    var b = back.getContext('2d'); b.globalCompositeOperation = 'source-over'; b.clearRect(0, 0, TW, TH);
+    b.save(); rrect(b, 0, 0, TW, TH, 46); b.clip();
+    b.fillStyle = '#0a0a0e'; b.fillRect(0, 0, TW, TH);
+    var g = b.createLinearGradient(0, 0, 0, TH); g.addColorStop(0, 'rgba(255,46,147,.18)'); g.addColorStop(.7, 'rgba(255,46,147,0)'); g.addColorStop(1, 'rgba(255,122,26,.5)'); b.fillStyle = g; b.fillRect(0, 0, TW, TH);
+    b.strokeStyle = 'rgba(255,255,255,.35)'; b.lineWidth = 3; b.setLineDash([12, 10]); b.beginPath(); b.moveTo(24, STUB_Y); b.lineTo(TW - 24, STUB_Y); b.stroke(); b.setLineDash([]);
+    b.restore(); punch(b);
   }
 
   var tex = new THREE.CanvasTexture(face); tex.anisotropy = 4;
   var backTex = new THREE.CanvasTexture(back); backTex.anisotropy = 4;
-  var T0 = 0;
-  function paint(t, ry) {
+  function paint(t, tot) {
     var f = firec, W2 = 160, H2 = 240;
     f.globalCompositeOperation = 'source-over';
     var bg = f.createLinearGradient(0, 0, 0, H2); bg.addColorStop(0, '#ff3d00'); bg.addColorStop(.5, '#ff7a00'); bg.addColorStop(1, '#ffc400'); f.fillStyle = bg; f.fillRect(0, 0, W2, H2);
@@ -399,14 +306,10 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
     var c = fctx; c.globalCompositeOperation = 'source-over'; c.clearRect(0, 0, TW, TH);
     c.save(); rrect(c, 0, 0, TW, TH, 46); c.clip();
     c.drawImage(fire, 0, 0, TW, TH); c.drawImage(mask, 0, 0); c.drawImage(detail, 0, 0);
-    var sx2 = (.5 + ry * .7 + Math.sin(t * .6) * .08) * (TW * 1.6) - TW * .3;
+    var sx2 = (.5 + Math.sin(tot) * .35 + Math.sin(t * .6) * .08) * (TW * 1.6) - TW * .3;
     var sh = c.createLinearGradient(sx2 - 160, 0, sx2 + 160, TH * .6); sh.addColorStop(0, 'rgba(255,255,255,0)'); sh.addColorStop(.5, 'rgba(255,255,255,.16)'); sh.addColorStop(1, 'rgba(255,255,255,0)');
     c.fillStyle = sh; c.fillRect(0, 0, TW, TH);
-    c.restore();
-    c.globalCompositeOperation = 'destination-out'; c.fillStyle = '#000';
-    rrect(c, TW / 2 - 64, 38, 128, 28, 14); c.fill();
-    c.beginPath(); c.arc(0, STUB_Y, 18, 0, 6.283); c.fill(); c.beginPath(); c.arc(TW, STUB_Y, 18, 0, 6.283); c.fill();
-    c.globalCompositeOperation = 'source-over';
+    c.restore(); punch(c);
     tex.needsUpdate = true;
   }
 
@@ -416,73 +319,71 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
 
   /* ---------- Badge + strap meshes ---------- */
   var BW = 2.4, BH = 3.6, TOPOFF = BH * .07;
-  var mats = [];
-  function bm(o) { var m = new THREE.MeshBasicMaterial(o); m.transparent = true; mats.push(m); return m; }
   var pivot = new THREE.Group(), card = new THREE.Group(); pivot.add(card); scene.add(pivot);
-  var frontM = bm({ map: tex, alphaTest: .35, side: THREE.FrontSide }), backM = bm({ map: backTex, alphaTest: .35, side: THREE.FrontSide });
+  var frontM = new THREE.MeshBasicMaterial({ map: tex, alphaTest: .35 }), backM = new THREE.MeshBasicMaterial({ map: backTex, alphaTest: .35 });
   var geo = new THREE.PlaneGeometry(BW, BH);
   var front = new THREE.Mesh(geo, frontM); front.position.z = .012;
   var rear = new THREE.Mesh(geo, backM); rear.rotation.y = Math.PI; rear.position.z = -.012;
-  card.add(front, rear);
-  var edge = new THREE.Mesh(new THREE.PlaneGeometry(BW * 1.012, BH * 1.008), bm({ color: 0x1a1a22, alphaTest: .5, side: THREE.DoubleSide, opacity: 1 }));
-  card.add(edge);
+  var edge = new THREE.Mesh(new THREE.PlaneGeometry(BW * 1.012, BH * 1.008), new THREE.MeshBasicMaterial({ color: 0x1a1a22, alphaTest: .5, side: THREE.DoubleSide }));
+  card.add(front, rear, edge);
 
   var strapC = mk(128, 512), sc2 = strapC.getContext('2d');
   sc2.fillStyle = '#ff2e93'; sc2.fillRect(0, 0, 128, 512);
   sc2.fillStyle = '#ffe600'; sc2.fillRect(8, 0, 4, 512); sc2.fillRect(116, 0, 4, 512);
-  sc2.save(); sc2.translate(64, 256); sc2.rotate(-Math.PI / 2); sc2.fillStyle = '#0a0a0e'; sc2.font = '800 44px ' + FF; sc2.textAlign = 'center'; sc2.textBaseline = 'middle'; sc2.fillText('STEVEN PIERRE  \u2022', 0, 4); sc2.restore();
+  sc2.save(); sc2.translate(64, 256); sc2.rotate(-Math.PI / 2); sc2.fillStyle = '#0a0a0e'; sc2.font = '800 44px ' + FF; sc2.textAlign = 'center'; sc2.textBaseline = 'middle'; sc2.fillText('STEVEN PIERRE  •', 0, 4); sc2.restore();
   var strapTex = new THREE.CanvasTexture(strapC); strapTex.wrapS = strapTex.wrapT = THREE.RepeatWrapping;
-  var strapM = bm({ map: strapTex, side: THREE.DoubleSide });
   var NSEG = 9, strapGeo = new THREE.BufferGeometry();
   var spos = new Float32Array((NSEG + 1) * 6), suv = new Float32Array((NSEG + 1) * 4), sidx = [];
   for (var si = 0; si < NSEG; si++) { var a0 = si * 2; sidx.push(a0, a0 + 1, a0 + 2, a0 + 1, a0 + 3, a0 + 2); }
   strapGeo.setAttribute('position', new THREE.BufferAttribute(spos, 3)); strapGeo.setAttribute('uv', new THREE.BufferAttribute(suv, 2)); strapGeo.setIndex(sidx);
-  var strap = new THREE.Mesh(strapGeo, strapM); strap.frustumCulled = false; scene.add(strap);
-  var clipG = new THREE.Group(), clipPlate = new THREE.Mesh(new THREE.BoxGeometry(.4, .3, .06), bm({ color: 0xcfd3da }));
-  var clipRing = new THREE.Mesh(new THREE.TorusGeometry(.1, .025, 8, 20), bm({ color: 0x8b909a })); clipRing.position.y = .22;
+  var strap = new THREE.Mesh(strapGeo, new THREE.MeshBasicMaterial({ map: strapTex, side: THREE.DoubleSide })); strap.frustumCulled = false; scene.add(strap);
+  var clipG = new THREE.Group(), clipPlate = new THREE.Mesh(new THREE.BoxGeometry(.4, .3, .06), new THREE.MeshBasicMaterial({ color: 0xcfd3da }));
+  var clipRing = new THREE.Mesh(new THREE.TorusGeometry(.1, .025, 8, 20), new THREE.MeshBasicMaterial({ color: 0x8b909a })); clipRing.position.y = .22;
   clipPlate.position.z = .04; clipRing.position.z = .04; clipG.add(clipPlate, clipRing); scene.add(clipG);
 
   /* ---------- Rope + badge physics (verlet, plane z = 0) ---------- */
-  var S = 1, anchor = { x: 0, y: 0 }, pts = [], A, B, Ls, Hb, wide = true, lastW = 0;
+  var S = 1, anchor = { x: 0, y: 0 }, pts = [], A, B, Ls, Hb, lastW = 0;
   function P(x, y, w) { return { x: x, y: y, px: x, py: y, w: w }; }
+  var ry = 0, rx = 0, flip = 0, flipTarget = 0, grab = null, gx = 0, gy = 0, hover = false, cprev = { x: 0, y: 0 }, g0 = null;
   function build() {
-    wide = innerWidth > 800;
     HW = HH * (innerWidth / innerHeight);
-    S = Math.min(1, Math.max(.7, HW * .43));
-    anchor.x = wide ? HW * .52 : 0; anchor.y = HH + .45;
-    Ls = .33 * S; Hb = BH * S * .86; pts = [];
+    S = Math.min(1.45, (HW * 2 * .8) / BW, (HH * 2 * .62) / BH);
+    anchor.x = 0; anchor.y = HH + .45;
+    Ls = .15 * S; Hb = BH * S * .86; pts = [];
     for (var i = 0; i <= NSEG; i++) pts.push(P(anchor.x, anchor.y - i * Ls, i === 0 ? 0 : 1));
     A = pts[NSEG]; A.w = .5;
-    B = P(anchor.x, A.y - Hb, .5); B.px = B.x - .12; B.py = B.y;
-    pivot.scale.setScalar(S);
-    clipG.scale.setScalar(S);
+    B = P(anchor.x, A.y - Hb, .5); B.px = B.x - .14; B.py = B.y;
+    pivot.scale.setScalar(S); clipG.scale.setScalar(S);
     ry = 0; rx = 0;
   }
-  var ry = 0, rx = 0, grab = null, gx = 0, gy = 0, hover = false, cprev = { x: 0, y: 0 };
-  function world(cx, cy) { return { x: (cx / innerWidth * 2 - 1) * HW, y: -(cy / innerHeight * 2 - 1) * HH }; }
+  function world(x, y) { return { x: (x / innerWidth * 2 - 1) * HW, y: -(y / innerHeight * 2 - 1) * HH }; }
   function cardState() {
     var dx = B.x - A.x, dy = B.y - A.y, l = Math.sqrt(dx * dx + dy * dy) || 1, ux = dx / l, uy = dy / l, off = BH * S * .5 - TOPOFF * S;
     return { ux: ux, uy: uy, cx: A.x + ux * off, cy: A.y + uy * off, phi: Math.atan2(ux, -uy) };
   }
-  var fade = 1;
-  hitBadge = function (cx, cy) {
-    if (fade < .3) return false;
-    var w = world(cx, cy), c = cardState(), dx = w.x - c.cx, dy = w.y - c.cy;
+  hitBadge = function (x, y) {
+    var w = world(x, y), c = cardState(), dx = w.x - c.cx, dy = w.y - c.cy;
     var along = dx * c.ux + dy * c.uy, perp = dx * -c.uy + dy * c.ux;
     return Math.abs(along) < BH * S * .52 && Math.abs(perp) < BW * S * .52;
   };
-  startGrab = function (cx, cy) {
-    var w = world(cx, cy), dA = Math.hypot(w.x - A.x, w.y - A.y), dB = Math.hypot(w.x - B.x, w.y - B.y);
-    grab = dA < dB * .6 ? A : B; gx = w.x; gy = w.y; document.body.classList.add('grabbing');
+  startGrab = function (x, y) {
+    var w = world(x, y), dA = Math.hypot(w.x - A.x, w.y - A.y), dB = Math.hypot(w.x - B.x, w.y - B.y);
+    grab = dA < dB * .6 ? A : B; gx = w.x; gy = w.y; g0 = { x: x, y: y, t: performance.now() };
   };
+  endGrab = function (x, y) {
+    if (!grab) return;
+    var tap = g0 && x !== null && Math.hypot(x - g0.x, y - g0.y) < 9 && performance.now() - g0.t < 400;
+    grab = null; g0 = null;
+    if (tap) flipBadge();
+  };
+  flipBadge = function () { flipTarget = flipTarget ? 0 : Math.PI; };
+  document.getElementById('flip').addEventListener('click', function () { flipBadge(); });
+  document.getElementById('reset').addEventListener('click', function () { build(); flip = flipTarget = 0; });
+  addEventListener('blur', function () { grab = null; });
   addEventListener('pointermove', function (e) {
     if (grab) { var w = world(e.clientX, e.clientY); gx = w.x; gy = w.y; }
-    else if (fine && !reduceCursor) { var h2 = hitBadge(e.clientX, e.clientY); if (h2 !== hover) { hover = h2; cur.classList.toggle('grab', h2); } }
+    else if (fine) { var h2 = hitBadge(e.clientX, e.clientY); if (h2 !== hover) { hover = h2; cur.classList.toggle('grab', h2); } }
   });
-  var reduceCursor = false;
-  function release() { if (grab) { grab = null; document.body.classList.remove('grabbing'); } }
-  addEventListener('pointerup', release); addEventListener('pointercancel', release); addEventListener('blur', release);
-  document.getElementById('reset').addEventListener('click', function () { build(); });
 
   function sat(p, q, rest) {
     var dx = q.x - p.x, dy = q.y - p.y, d = Math.sqrt(dx * dx + dy * dy) || 1e-6, wsum = p.w + q.w; if (!wsum) return;
@@ -509,14 +410,13 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
     for (i = 0; i <= NSEG; i++) {
       var a = pts[Math.max(0, i - 1)], b = pts[Math.min(NSEG, i + 1)], tx = b.x - a.x, ty = b.y - a.y, l = Math.hypot(tx, ty) || 1, nx = -ty / l, ny = tx / l, p = pts[i];
       spos.set([p.x + nx * wd / 2, p.y + ny * wd / 2, .03, p.x - nx * wd / 2, p.y - ny * wd / 2, .03], i * 6);
-      var v = lens[i] / (1.7 * S); suv.set([0, v, 1, v], i * 4);
+      var v = lens[i] / (1.7 * S) + 2; suv.set([0, v, 1, v], i * 4);
     }
     strapGeo.attributes.position.needsUpdate = true; strapGeo.attributes.uv.needsUpdate = true;
   }
 
-  var mx = 0, tx2 = 0, sy2 = 0;
+  var mx = 0, tx2 = 0;
   addEventListener('pointermove', function (e) { mx = e.clientX / innerWidth - .5; });
-  addEventListener('scroll', function () { sy2 = scrollY / Math.max(1, document.body.scrollHeight - innerHeight); }, { passive: true });
 
   function size() {
     var w = innerWidth, hgt = innerHeight;
@@ -525,6 +425,16 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
     if (w !== lastW) { lastW = w; build(); }
   }
   addEventListener('resize', size); size();
+
+  var backEl = document.getElementById('back');
+  function placeBack(c, total) {
+    var pxu = innerHeight / (2 * HH), D = 9 * pxu;
+    var sxp = (c.cx / HW + 1) / 2 * innerWidth, syp = (1 - c.cy / HH) / 2 * innerHeight;
+    var u = pxu * BW * S / TW, showing = Math.cos(total) < -.02;
+    document.getElementById('bwrap').style.perspective = D + 'px';
+    backEl.style.visibility = showing ? 'visible' : 'hidden';
+    backEl.style.transform = 'translate3d(' + (sxp - TW / 2) + 'px,' + (syp - TH / 2) + 'px,0) rotate(' + (-c.phi) + 'rad) rotateX(' + (-rx) + 'rad) rotateY(' + (total - Math.PI) + 'rad) scale(' + u + ')';
+  }
 
   var clk = new THREE.Clock(), last = 0, acc = 0;
   function frame() {
@@ -536,18 +446,17 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--cyan); outline-
     acc += dt; var H = 1 / 120; while (acc >= H) { step(H); acc -= H; }
 
     var c = cardState(), vx = (c.cx - cprev.x) / Math.max(dt, .001), vy = (c.cy - cprev.y) / Math.max(dt, .001); cprev.x = c.cx; cprev.y = c.cy;
-    ry += ((-vx * .09 + Math.sin(t * .8) * .14) - ry) * .07; ry = Math.max(-1.25, Math.min(1.25, ry));
+    ry += ((-vx * .09 + Math.sin(t * .8) * .14) - ry) * .07; ry = Math.max(-1.1, Math.min(1.1, ry));
     rx += ((vy * .02) - rx) * .08; rx = Math.max(-.5, Math.min(.5, rx));
-    pivot.position.set(c.cx, c.cy, 0); pivot.rotation.z = c.phi; card.rotation.y = ry; card.rotation.x = rx;
+    flip += (flipTarget - flip) * (reduce ? 1 : .1);
+    var total = ry + flip;
+    pivot.position.set(c.cx, c.cy, 0); pivot.rotation.z = c.phi; card.rotation.y = total; card.rotation.x = rx;
     clipG.position.set(A.x, A.y, 0); clipG.rotation.z = c.phi;
     updateStrap();
-    paint(reduce ? 0 : t, ry);
+    paint(reduce ? 0 : t, total);
+    placeBack(c, total);
 
-    fade = 1 - Math.min(1, Math.max(0, (scrollY - innerHeight * .35) / (innerHeight * .5)));
-    for (var i = 0; i < mats.length; i++) mats[i].opacity = fade;
-    pivot.visible = strap.visible = clipG.visible = fade > .01;
-
-    var speed = (5 + sy2 * 6) * warp * dt, len = .5 + warp * .9;
+    var speed = 5 * warp * dt, len = .5 + warp * .9;
     for (var s2 = 0; s2 < N; s2++) {
       sz[s2] += speed; if (sz[s2] > 10) sz[s2] -= SP;
       var o = s2 * 6;
