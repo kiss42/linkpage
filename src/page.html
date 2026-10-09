@@ -38,8 +38,12 @@ body { margin: 0; background: var(--ink); color: var(--ivory); font: 400 1rem/1.
 .vert { position: fixed; left: 1.25rem; top: 50%; transform: translateY(-50%); z-index: 2; writing-mode: vertical-rl; font: 400 1rem var(--f-pixel); letter-spacing: .5em; color: var(--gold); opacity: .7; pointer-events: none; display: none; }
 @media (min-width: 900px) { .vert { display: block; } }
 
+.promo { position: fixed; top: 0; left: 0; right: 0; z-index: 7; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .4rem .9rem; padding: .55rem 1rem; background: var(--gold-grad); color: #050505; font: 400 .95rem/1.3 var(--f-pixel); letter-spacing: .03em; text-align: center; }
+.promo b { font: 400 1rem var(--f-dela); letter-spacing: 0; }
+.promo button { font: 400 .85rem var(--f-dela); color: var(--gold-hi); background: #050505; border: 0; border-radius: 99px; padding: .45rem 1rem; cursor: pointer; }
+.promo button.quiet { background: transparent; color: #050505; font: 400 .85rem var(--f-pixel); text-decoration: underline; padding: .3rem .4rem; }
 .top, .bar { position: fixed; left: 0; right: 0; z-index: 4; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding-inline: 1.25rem; font: 400 .9rem var(--f-pixel); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
-.top { top: 0; padding-block: 1.1rem; }
+.top { top: var(--promo-h, 2.6rem); padding-block: 1rem; }
 .live { display: inline-flex; align-items: center; gap: .55rem; color: var(--gold-hi); }
 .live i { width: .6rem; height: .6rem; border-radius: 50%; background: var(--gold-hi); animation: ping 1.4s infinite; }
 @keyframes ping { 0% { box-shadow: 0 0 0 0 var(--gold); } 80%, 100% { box-shadow: 0 0 0 .8rem transparent; } }
@@ -72,9 +76,10 @@ kbd { font: 400 .8rem var(--f-pixel); border: 1px solid var(--gold-lo); border-b
 .link:hover, .link:focus-visible { background: var(--gold-grad); color: var(--ink); }
 .link:hover .tg, .link:hover .ar, .link:focus-visible .tg, .link:focus-visible .ar { color: var(--ink); }
 .link:focus-visible { outline: 4px solid var(--ivory); outline-offset: 3px; }
-.mail { position: absolute; left: 56px; right: 56px; top: 800px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; pointer-events: none; }
-.mail code { font: 400 22px var(--f-pixel); color: var(--ivory); background: rgba(212,175,55,.1); border: 2px dashed var(--gold); padding: 8px 12px; border-radius: 8px; pointer-events: auto; user-select: all; }
-.mail button { font: 400 18px var(--f-dela); color: var(--ink); background: var(--gold-grad); border: 0; padding: 10px 18px; border-radius: 99px; cursor: pointer; pointer-events: auto; }
+.order { position: absolute; left: 56px; right: 56px; top: 806px; display: grid; gap: 8px; justify-items: center; text-align: center; pointer-events: none; }
+.order button { font: 400 24px var(--f-dela); color: #050505; background: var(--gold-grad); border: 0; border-radius: 99px; padding: 14px 28px; cursor: pointer; pointer-events: auto; }
+.order button:focus-visible { outline: 4px solid var(--ivory); outline-offset: 3px; }
+.order small { font: 400 17px var(--f-pixel); letter-spacing: .06em; color: var(--muted); }
 
 .fallback { display: none; position: fixed; inset: 0; z-index: 6; overflow: auto; padding: 5rem 1.25rem; place-content: center; gap: .75rem; }
 .fallback h1 { font: 400 clamp(2.2rem, 9vw, 4.5rem)/1 var(--f-dela); margin: 0 0 1rem; color: var(--gold-hi); }
@@ -86,6 +91,7 @@ kbd { font: 400 .8rem var(--f-pixel); border: 1px solid var(--gold-lo); border-b
 .cursor.grab { width: 3.6rem; height: 3.6rem; margin: -1.8rem 0 0 -1.8rem; border-color: var(--ivory); }
 @media (pointer: fine) { .cursor { display: block; } body, a, button, summary { cursor: none; } }
 a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--gold-hi); outline-offset: 3px; }
+@media (max-width: 600px) { .top { display: none; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition: none !important; } }
 </style>
 
@@ -96,6 +102,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
 <canvas id="fx" aria-hidden="true"></canvas>
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 
+<div class="promo" id="promo">
+  <span><b>Want a pass like this?</b> I'll build yours in a week.</span>
+  <span><button type="button" data-order>Get yours</button> <button type="button" class="quiet" data-copy>Copy my email</button></span>
+</div>
+
 <div class="top">
   <span>kiss42 / linkpage</span>
   <span class="live"><i></i>オンライン</span>
@@ -105,9 +116,9 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   <div class="back" id="back">
     <h2><span>リンク / Links</span><span>05</span></h2>
     <div class="links" id="links"></div>
-    <div class="mail">
-      <code id="addr">kisspierre42@gmail.com</code>
-      <button id="copy" type="button">Copy</button>
+    <div class="order">
+      <button type="button" data-order>ご依頼 · Get your own pass ↗</button>
+      <small>Built for you in about a week</small>
     </div>
   </div>
 </div>
@@ -146,15 +157,27 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   ];
   function linkHTML(l) { return '<a class="link" target="_blank" rel="noopener noreferrer" href="' + l.href + '"><span class="nm" style="font-family: ' + l.f + '">' + l.name + '</span><span class="tg">' + l.tag + '</span><span class="ar">↗</span></a>'; }
   document.getElementById('links').innerHTML = LINKS.map(linkHTML).join('');
-  document.getElementById('fallback').insertAdjacentHTML('beforeend', LINKS.map(linkHTML).join(''));
+  document.getElementById('fallback').insertAdjacentHTML('beforeend', LINKS.map(linkHTML).join('') + '<button class="btn" type="button" data-order style="justify-self:start;margin-top:1rem">Get your own pass</button>');
 
-  /* Copy email */
-  var btn = document.getElementById('copy'), addr = document.getElementById('addr');
-  btn.addEventListener('click', function () {
-    var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); };
-    var fallback = function () { var r = document.createRange(); r.selectNodeContents(addr); var s = getSelection(); s.removeAllRanges(); s.addRange(r); };
-    if (navigator.clipboard) navigator.clipboard.writeText(addr.textContent).then(done, fallback); else fallback();
+  /* Contact: the address is never printed on the page. It is assembled when someone clicks. */
+  function addr() { return String.fromCharCode(107,105,115,115,112,105,101,114,114,101,52,50) + String.fromCharCode(64) + ['gmail', 'com'].join('.'); }
+  function orderMail() {
+    var body = 'Hi Steven,\n\nI saw your link pass and I want one of my own.\n\nMy name:\nMy links (Instagram, X, Patreon, anything):\nColors and vibe:\nWhen I need it by:\n\nThanks!';
+    location.href = 'mailto:' + addr() + '?subject=' + encodeURIComponent('I want my own link pass') + '&body=' + encodeURIComponent(body);
+  }
+  function copyMail(el) {
+    var t = addr(), done = function () { var o = el.textContent; el.textContent = 'Copied'; setTimeout(function () { el.textContent = o; }, 1600); };
+    var legacy = function () { var x = document.createElement('textarea'); x.value = t; x.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(x); x.select(); try { document.execCommand('copy'); done(); } catch (e) {} x.remove(); };
+    if (navigator.clipboard) navigator.clipboard.writeText(t).then(done, legacy); else legacy();
+  }
+  document.addEventListener('click', function (e) {
+    var o = e.target.closest('[data-order]'), c = e.target.closest('[data-copy]');
+    if (o) orderMail(); else if (c) copyMail(c);
   });
+  var promo = document.getElementById('promo');
+  function promoH() { document.documentElement.style.setProperty('--promo-h', promo.offsetHeight + 'px'); }
+  addEventListener('resize', promoH); promoH();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(promoH);
 
   /* Cursor */
   var cur = document.getElementById('cursor'), cx = 0, cy = 0, px = 0, py = 0;
@@ -192,7 +215,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px soli
   /* Warp + pass interaction hooks (filled in by the 3D section) */
   var warpHold = false, warp = 1, holdTimer;
   var hitBadge = function () { return false; }, startGrab = function () {}, endGrab = function () {}, flipBadge = function () {};
-  var SKIP = 'a, button, summary, .edit, .back .mail';
+  var SKIP = 'a, button, summary, .edit, .promo, .back .order';
   addEventListener('keydown', function (e) {
     if (/^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
     if (e.code === 'Space' && !/^(BUTTON|A|SUMMARY)$/.test(e.target.tagName)) { e.preventDefault(); warpHold = true; }
