@@ -1,24 +1,281 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Steven Pierre</title>
-  <meta name="description" content="Links for Steven Pierre.">
-  <link rel="stylesheet" href="style.css">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 </head>
 <body>
-  <main>
-    <header>
-      <div class="avatar" aria-hidden="true">SP</div>
-      <h1>Steven Pierre</h1>
-      <p class="tagline">Add a short tagline here.</p>
-    </header>
-    <nav aria-label="Links">
-      <a class="link" href="https://github.com/kiss42">GitHub</a>
-      <a class="link" href="mailto:kisspierre42@gmail.com">Email</a>
-      <!-- Add more links: <a class="link" href="URL">Label</a> -->
-    </nav>
-  </main>
+<title>Steven Pierre</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Hanken+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout: full-bleed 3D stage behind a left-aligned hero, then a tilt-card link grid, ticker and status strip. */
+:root {
+  --ink: #06100f;
+  --panel: #0e1c1b;
+  --line: #1f3533;
+  --text: #eaf5f2;
+  --muted: #8aa39f;
+  --signal: #ffd23f;
+  --aqua: #4ff0d2;
+  --f-display: "Bricolage Grotesque", "Arial Black", system-ui, sans-serif;
+  --f-body: "Hanken Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--text);
+  font: 400 1rem/1.55 var(--f-body);
+  overflow-x: hidden;
+}
+#stage { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; display: block; }
+.veil { position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(70% 60% at 75% 35%, transparent 0%, var(--ink) 100%), linear-gradient(90deg, var(--ink) 0%, transparent 60%); opacity: .75; }
+.wrap { position: relative; z-index: 2; max-width: 68rem; margin: 0 auto; padding-inline: 1.25rem; padding-block: 2rem 4rem; }
+
+.top { display: flex; justify-content: space-between; align-items: center; gap: 1rem; font: 500 .8rem var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.live { display: inline-flex; align-items: center; gap: .5rem; }
+.live i { width: .55rem; height: .55rem; border-radius: 50%; background: var(--aqua); box-shadow: 0 0 0 0 var(--aqua); animation: ping 1.8s infinite; }
+@keyframes ping { 70% { box-shadow: 0 0 0 .6rem transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+.hero { padding-block: clamp(3rem, 12vh, 7rem) 3rem; max-width: 40rem; }
+.eyebrow { font: 500 .85rem var(--f-mono); color: var(--aqua); letter-spacing: .1em; text-transform: uppercase; margin: 0 0 1rem; }
+h1 { font: 800 clamp(3.2rem, 11vw, 7rem)/.92 var(--f-display); letter-spacing: -.035em; margin: 0; text-wrap: balance;
+  background: linear-gradient(100deg, var(--text) 30%, var(--signal) 60%, var(--aqua) 90%); background-size: 200% 100%; -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: sheen 6s ease-in-out infinite alternate; }
+@keyframes sheen { to { background-position: 100% 0; } }
+.role { margin: 1.25rem 0 0; font: 500 clamp(1.1rem, 3vw, 1.5rem) var(--f-mono); min-height: 2em; }
+.role b { color: var(--signal); font-weight: 500; }
+.caret { display: inline-block; width: .6ch; height: 1.1em; background: var(--signal); vertical-align: -.15em; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.bio { color: var(--muted); max-width: 34rem; margin: 1rem 0 0; font-size: 1.1rem; }
+.cta { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 2rem; }
+.btn { font: 600 1rem var(--f-body); padding: .85rem 1.4rem; border-radius: .25rem; text-decoration: none; border: 1px solid var(--signal); color: var(--ink); background: var(--signal); transition: transform .15s, box-shadow .15s; }
+.btn:hover, .btn:focus-visible { transform: translate(-3px, -3px); box-shadow: 4px 4px 0 var(--aqua); }
+.btn.ghost { background: transparent; color: var(--text); border-color: var(--line); }
+
+h2 { font: 800 clamp(1.5rem, 4vw, 2rem) var(--f-display); letter-spacing: -.02em; margin: 3.5rem 0 1.25rem; display: flex; align-items: baseline; gap: .75rem; }
+h2 small { font: 500 .8rem var(--f-mono); color: var(--muted); letter-spacing: .06em; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: 1rem; perspective: 900px; }
+.card { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 2.5rem; min-height: 9.5rem; padding: 1.25rem;
+  background: linear-gradient(160deg, var(--panel), color-mix(in srgb, var(--panel) 60%, var(--ink)));
+  border: 1px solid var(--line); border-radius: .5rem; color: var(--text); text-decoration: none;
+  transform-style: preserve-3d; transition: transform .2s ease-out, border-color .2s; will-change: transform; min-width: 0; }
+.card::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .2s;
+  background: radial-gradient(18rem circle at var(--mx, 50%) var(--my, 50%), color-mix(in srgb, var(--signal) 22%, transparent), transparent 60%); }
+.card:hover, .card:focus-visible { border-color: var(--signal); }
+.card:hover::after, .card:focus-visible::after { opacity: 1; }
+.card .tag { font: 500 .75rem var(--f-mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; transform: translateZ(20px); }
+.card .name { font: 800 1.5rem/1.1 var(--f-display); letter-spacing: -.02em; display: flex; justify-content: space-between; align-items: flex-end; gap: .5rem; transform: translateZ(40px); overflow-wrap: anywhere; }
+.card .arrow { color: var(--signal); transition: transform .2s; font-family: var(--f-mono); }
+.card:hover .arrow { transform: translate(4px, -4px); }
+.in { opacity: 0; transform: translateY(18px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: calc(var(--i, 0) * 80ms + .2s); }
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+.mail { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: 1rem; font: 500 .95rem var(--f-mono); color: var(--muted); }
+.mail code { color: var(--text); background: var(--panel); border: 1px solid var(--line); padding: .35rem .6rem; border-radius: .25rem; overflow-wrap: anywhere; }
+.mail button { font: 500 .85rem var(--f-mono); color: var(--ink); background: var(--aqua); border: 0; padding: .4rem .8rem; border-radius: .25rem; cursor: pointer; }
+
+.ticker { overflow: hidden; margin-top: 4rem; border-block: 1px solid var(--line); padding-block: .9rem; white-space: nowrap; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.track { display: inline-flex; gap: 2.5rem; animation: slide 28s linear infinite; font: 800 1.6rem var(--f-display); letter-spacing: -.01em; color: transparent; -webkit-text-stroke: 1px var(--muted); }
+.track span:nth-child(3n) { color: var(--signal); -webkit-text-stroke: 0; }
+@keyframes slide { to { transform: translateX(-50%); } }
+
+.now { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: .5rem; overflow: hidden; }
+.now div { background: var(--ink); padding: 1.1rem; min-width: 0; }
+.now dt { font: 500 .75rem var(--f-mono); color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+.now dd { margin: .4rem 0 0; font: 600 1.15rem var(--f-body); }
+footer { margin-top: 3rem; color: var(--muted); font: 400 .85rem var(--f-mono); display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem; }
+
+a:focus-visible, button:focus-visible { outline: 2px solid var(--aqua); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition: none !important; }
+  .in { opacity: 1; transform: none; }
+}
+</style>
+
+<canvas id="stage" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+
+<div class="wrap">
+  <div class="top">
+    <span>kiss42 / linkpage</span>
+    <span class="live"><i></i>Online now</span>
+  </div>
+
+  <header class="hero">
+    <p class="eyebrow in" style="--i:0">Personal link hub</p>
+    <h1 id="name" class="in" style="--i:1">Steven Pierre</h1>
+    <p class="role in" style="--i:2"><span id="typed"></span><span class="caret"></span></p>
+    <p class="bio in" style="--i:3">Everything I'm building and everywhere you can find me, in one place.</p>
+    <div class="cta in" style="--i:4">
+      <a class="btn" href="#links">See my links</a>
+      <a class="btn ghost" href="https://github.com/kiss42">GitHub profile</a>
+    </div>
+  </header>
+
+  <section id="links">
+    <h2>Find me <small>/ 06 places</small></h2>
+    <div class="grid">
+      <a class="card in" style="--i:5" href="https://github.com/kiss42"><span class="tag">Code</span><span class="name">GitHub <span class="arrow">↗</span></span></a>
+      <a class="card in" style="--i:6" href="#"><span class="tag">Network</span><span class="name">LinkedIn <span class="arrow">↗</span></span></a>
+      <a class="card in" style="--i:7" href="#"><span class="tag">Photos</span><span class="name">Instagram <span class="arrow">↗</span></span></a>
+      <a class="card in" style="--i:8" href="#"><span class="tag">Updates</span><span class="name">X <span class="arrow">↗</span></span></a>
+      <a class="card in" style="--i:9" href="#"><span class="tag">Video</span><span class="name">YouTube <span class="arrow">↗</span></span></a>
+      <a class="card in" style="--i:10" href="#"><span class="tag">Work</span><span class="name">Portfolio <span class="arrow">↗</span></span></a>
+    </div>
+    <div class="mail">
+      <span>Email</span>
+      <code id="addr">kisspierre42@gmail.com</code>
+      <button id="copy" type="button">Copy</button>
+    </div>
+  </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="track" id="track"></div>
+  </div>
+
+  <section>
+    <h2>Right now <small>/ status</small></h2>
+    <dl class="now">
+      <div><dt>Status</dt><dd>Open to new projects</dd></div>
+      <div><dt>Building</dt><dd>This link page</dd></div>
+      <div><dt>Local time</dt><dd id="clock">--:--</dd></div>
+      <div><dt>Last updated</dt><dd>October 2026</dd></div>
+    </dl>
+  </section>
+
+  <footer><span>© 2026 Steven Pierre</span><span>Drag the shape. Hover the cards.</span></footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Ticker */
+  var words = ['Steven Pierre', 'Builder', 'Creator', 'Open to work', 'Say hello'];
+  var t = document.getElementById('track'), html = '';
+  for (var r = 0; r < 4; r++) words.forEach(function (w) { html += '<span>' + w + '</span>'; });
+  t.innerHTML = html;
+
+  /* Typed roles */
+  var roles = ['Builder of things.', 'Designer of experiments.', 'Always shipping.', 'Say hello below.'];
+  var el = document.getElementById('typed'), ri = 0, ci = 0, del = false;
+  function type() {
+    var s = roles[ri];
+    el.textContent = s.slice(0, ci);
+    if (!del && ci === s.length) { del = true; return setTimeout(type, 1600); }
+    if (del && ci === 0) { del = false; ri = (ri + 1) % roles.length; }
+    ci += del ? -1 : 1;
+    setTimeout(type, del ? 28 : 70);
+  }
+  if (reduce) el.textContent = roles[0]; else type();
+
+  /* Name scramble */
+  var nameEl = document.getElementById('name'), final = nameEl.textContent, chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&@';
+  if (!reduce) {
+    var f = 0;
+    var iv = setInterval(function () {
+      f++;
+      nameEl.textContent = final.split('').map(function (c, i) {
+        return c === ' ' || i < f / 2 ? c : chars[Math.floor(Math.random() * chars.length)];
+      }).join('');
+      if (f / 2 >= final.length) { clearInterval(iv); nameEl.textContent = final; }
+    }, 40);
+  }
+
+  /* Clock */
+  var clock = document.getElementById('clock');
+  function tick() { clock.textContent = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); }
+  tick(); setInterval(tick, 15000);
+
+  /* Copy email */
+  var btn = document.getElementById('copy'), addr = document.getElementById('addr');
+  btn.addEventListener('click', function () {
+    var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1500); };
+    var fallback = function () { var r = document.createRange(); r.selectNodeContents(addr); var s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+    if (navigator.clipboard) navigator.clipboard.writeText(addr.textContent).then(done, fallback); else fallback();
+  });
+
+  /* Card tilt */
+  if (!reduce && window.matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll('.card').forEach(function (c) {
+      c.addEventListener('pointermove', function (e) {
+        var b = c.getBoundingClientRect(), x = (e.clientX - b.left) / b.width, y = (e.clientY - b.top) / b.height;
+        c.style.transform = 'rotateY(' + ((x - .5) * 16) + 'deg) rotateX(' + ((.5 - y) * 16) + 'deg) translateZ(8px)';
+        c.style.setProperty('--mx', (x * 100) + '%'); c.style.setProperty('--my', (y * 100) + '%');
+      });
+      c.addEventListener('pointerleave', function () { c.style.transform = ''; });
+    });
+  }
+
+  /* 3D stage */
+  var canvas = document.getElementById('stage');
+  if (!window.THREE) return;
+  var renderer;
+  try { renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true }); } catch (e) { return; }
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  var scene = new THREE.Scene(), cam = new THREE.PerspectiveCamera(50, 1, .1, 100);
+  cam.position.z = 7;
+
+  var group = new THREE.Group(); scene.add(group);
+  var core = new THREE.Mesh(new THREE.IcosahedronGeometry(1.6, 1), new THREE.MeshBasicMaterial({ color: 0xffd23f, wireframe: true }));
+  var inner = new THREE.Mesh(new THREE.IcosahedronGeometry(1.1, 0), new THREE.MeshBasicMaterial({ color: 0x4ff0d2, wireframe: true, transparent: true, opacity: .55 }));
+  var ring = new THREE.Mesh(new THREE.TorusGeometry(2.5, .012, 8, 120), new THREE.MeshBasicMaterial({ color: 0x4ff0d2 }));
+  var ring2 = new THREE.Mesh(new THREE.TorusGeometry(3.1, .008, 8, 120), new THREE.MeshBasicMaterial({ color: 0xffd23f, transparent: true, opacity: .6 }));
+  ring.rotation.x = 1.2; ring2.rotation.y = 1.1;
+  group.add(core, inner, ring, ring2);
+
+  var n = 900, pos = new Float32Array(n * 3);
+  for (var i = 0; i < n; i++) {
+    var rad = 4 + Math.random() * 9, th = Math.random() * 6.283, ph = Math.acos(2 * Math.random() - 1);
+    pos[i * 3] = rad * Math.sin(ph) * Math.cos(th); pos[i * 3 + 1] = rad * Math.sin(ph) * Math.sin(th); pos[i * 3 + 2] = rad * Math.cos(ph);
+  }
+  var pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  var pts = new THREE.Points(pg, new THREE.PointsMaterial({ color: 0xeaf5f2, size: .03, transparent: true, opacity: .7 }));
+  scene.add(pts);
+
+  var mx = 0, my = 0, tx = 0, ty = 0, dragging = false, lx = 0, ly = 0, spin = 0, spinY = 0, sy = 0;
+  addEventListener('pointermove', function (e) {
+    mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5;
+    if (dragging) { spin += (e.clientX - lx) * .01; spinY += (e.clientY - ly) * .01; lx = e.clientX; ly = e.clientY; }
+  });
+  addEventListener('pointerdown', function (e) { if (e.target === document.documentElement || e.target.closest('.hero, .top, footer')) { dragging = true; lx = e.clientX; ly = e.clientY; } });
+  addEventListener('pointerup', function () { dragging = false; });
+  addEventListener('scroll', function () { sy = scrollY / Math.max(1, document.body.scrollHeight - innerHeight); }, { passive: true });
+
+  function size() {
+    var w = innerWidth, h = innerHeight;
+    renderer.setSize(w, h, false); cam.aspect = w / h;
+    group.position.x = w > 800 ? 2.6 : 0; group.position.y = w > 800 ? 0 : 1.6;
+    group.scale.setScalar(w > 800 ? 1 : .75);
+    cam.updateProjectionMatrix();
+  }
+  addEventListener('resize', size); size();
+
+  var clockT = new THREE.Clock();
+  function frame() {
+    var t = clockT.getElapsedTime();
+    tx += (mx - tx) * .05; ty += (my - ty) * .05;
+    core.rotation.y = t * .25 + spin; core.rotation.x = t * .15 + spinY;
+    inner.rotation.y = -t * .4 + spin; inner.rotation.x = -t * .3 + spinY;
+    ring.rotation.z = t * .3; ring2.rotation.x = t * .2;
+    var s = 1 + Math.sin(t * 1.5) * .04; core.scale.setScalar(s);
+    pts.rotation.y = t * .02 + sy * 1.5;
+    cam.position.x = tx * 1.5; cam.position.y = -ty * 1.2 - sy * 1.5; cam.lookAt(0, -sy * 1.5, 0);
+    renderer.render(scene, cam);
+    if (!reduce) requestAnimationFrame(frame);
+  }
+  frame();
+})();
+</script>
+
 </body>
 </html>
